@@ -75,11 +75,10 @@ def show_all(request):
     # create a dictionary of context variables for the template:
     context = {
         "current_time" : time.ctime(),
+        "quotes" : quotes,
+        "images" : images,
     }
-    
     # show all of the quotes and images
-    
-    
 
     # delegate rendering work to the template
     return render(request, template_name, context)
@@ -91,8 +90,6 @@ def quote(request):
         # create a dictionary of context variables for the template:
         context = {
             "current_time" : time.ctime(),
-            "quotes" : quotes,
-            "images" : images,
         }
     
         # delegate rendering work to the template
