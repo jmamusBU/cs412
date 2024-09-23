@@ -90,6 +90,8 @@ def quote(request):
         # create a dictionary of context variables for the template:
         context = {
             "current_time" : time.ctime(),
+            "quote" : random.choice(quotes),
+            "image" : random.choice(images),
         }
     
         # delegate rendering work to the template
