@@ -1,0 +1,23 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Welcome!</h1>
+    <div id="common">
+        <img src="{% static "restaurant/myrestaurant.jpg" %}" alt="My restaurant" width="500" height="500">
+        <p>Welcome to my new restaurant where we offer and combine different plates from a large variety of food genres from around the world.</p>
+        <h2>Hours of Operation</h2>
+        <table>
+            <tbody>
+                <tr><td>Monday</td><td>12:30 PM - 9:30 PM</td></tr>
+                <tr><td>Tuesday</td><td>12:30 PM - 9:30 PM</td></tr>
+                <tr><td>Wednesday</td><td>12:30 PM - 9:30 PM</td></tr>
+                <tr><td>Thursday</td><td>12:30 PM - 9:30 PM</td></tr>
+                <tr><td>Friday</td><td>12:30 PM - 9:30 PM</td></tr>
+                <tr><td>Saturday</td><td>12:30 PM - 9:30 PM</td></tr>
+                <tr><td>Sunday</td><td>Closed</td></tr>
+            </tbody>
+        </table>
+        <h3>Current Location: 725 Commonwealth Ave, Boston, MA 02215</h3>
+    </div>
+{% endblock %}

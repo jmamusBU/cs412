@@ -1,0 +1,28 @@
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+    <h1><strong><em>Order Confirmed!</em></strong></h1>
+    <h2>Your Order</h2>
+    <div id="common">
+    <ul>
+        {% for r in results %}
+            <li><h3>{{r.0}} - ${{r.1}}</h3></li>
+            {% for t in r.2 %}
+                <li class="ind"><p>{{t}}</p></li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+    <h2>Total: ${{price}}</h2>
+
+    <h2><em>Your order will be ready around:</em></h2>
+    <h3>{{readytime}}</h3>
+
+    <h2>Special Instructions</h2>
+    <p>{{instructions}}</p>
+    <h2>Contact Information</h2>
+    <p>Name: {{name}}</p>
+    <p>Phone Number: {{phone}}</p>
+    <p>Email: {{email}}</p>
+    </div>
+
+{% endblock %}

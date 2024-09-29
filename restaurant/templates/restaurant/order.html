@@ -1,0 +1,32 @@
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+    <h1>Order</h1>
+    <div id="common" class="centers">
+    <form action="{% url 'confirmation' %}" method="POST">
+        {% csrf_token %}
+        {% for regular in regulars%}
+            <input type="checkbox" name="food" value="{{regular}}">{{regular.0}} - ${{regular.1}}
+            {% for topping in regular.2 %}
+                <input type="checkbox" name="{{regular.0}}" value="{{topping}}">{{topping}}
+            {% endfor %}
+            <br>
+        {% endfor %}
+    <h2>Daily Special</h2>
+    <input type="checkbox" name="food" value="{{special}}">{{special.0}} - ${{special.1}}
+    {% for topping in special.2 %}
+        <input type="checkbox" name="{{special.0}}" value="{{topping}}">{{topping}}
+    {% endfor %}
+    <br>
+    <h3>Special Instructions</h3>
+    <input id="instructions" type="text" name="instructions">
+    <br>
+    <h3>Contact Information</h3>
+    Name: <input type="text" name="name">
+    Phone Number: <input type="text" name="phone">
+    <br>
+    Email: <input type="text" name="email">
+    <input id="button" type="submit" value="Order">
+        </form>
+    </div>  
+{% endblock %}

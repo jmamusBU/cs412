@@ -1,0 +1,23 @@
+{% load static %}
+<html>
+    <head>
+        <link rel="stylesheet" href={% static "restaurant/styles.css"%}/>
+        <title>Hello, world!</title>
+    </head>
+    <body>
+        <header>
+            <h1><strong>Jose's Faultless Fusion!</strong></h1>
+            <p><em>Welcome to my Restaurant!</em></p>
+        </header>
+        <nav>
+            <a href="{% url 'main' %}">Main page</a>
+            <br>
+            <a href="{% url 'order' %}">Place an order</a>
+        </nav>
+        
+    {% block content %}
+    {% endblock %}
+    
+    
+    </body>
+</html>
