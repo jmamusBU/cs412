@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+<h1>Show All Articles</h1>
+
+<!--{{ articles }}-->
+
+<main class="grid-container">
+    <!-- loop to displat each Article -->
+    {% for a in articles %}
+    <article>
+
+        <img src="{{ a.image.url }}" alt="image">
+        <div>
+        <h2>{{ a.title }}</h2>
+        <h3>by {{ a.author }} at {{a.published}}</h3>
+        <!-- display url image-->
+        <img src="{{ a.image.url }}" alt="image">
+        <p>
+            {{ a.text }}
+        </p>
+    </div>
+    {% endfor %}
+</div>

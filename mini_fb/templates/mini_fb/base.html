@@ -1,0 +1,16 @@
+{% load static %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href={% static "mini_fb/styles.css"%}/>
+        <title>Quotes</title>
+    </head>
+    <body>
+        
+        <nav>
+            <a href="{% url 'show_all' %}">Show all</a>
+        </nav>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
