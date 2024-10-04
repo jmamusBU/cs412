@@ -1,0 +1,29 @@
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+
+<h2>Show All Profiles</h2>
+<!-- loop to display each Profile -->
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">First Name</th>
+            <th class="table_text">Last Name</th>
+            <th class="table_text">City</th>
+            <th class="table_text">Profile Image</th>
+        </tr>
+        {% for p in profiles %}
+            <tr>
+                <td class="table_text">{{ p.first_name }}</td>
+                <td class="table_text">{{ p.last_name }}</td>
+                <td class="table_text">{{ p.city }}</td>
+                <td><img src="{{ p.image_url }}" alt="image" width="250"></td>
+            </tr>
+            
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+{% endblock %}
+
+

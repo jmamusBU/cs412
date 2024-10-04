@@ -1,18 +1,22 @@
 body {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: roboto, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #FFFDD0; 
-    color: #000080;
-    padding: 10px;
-    margin: 10px;
     font-size: 22;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 h1 {
-    font-size: 4em;
-    color: #000000; 
-    text-align: center;
+    color: #000080; 
+    text-align: left;
+    margin: 0;
+    padding: 0;
 }
 
 th {
@@ -29,4 +33,29 @@ h2 {
 table, th, td {
     border: 10px solid #000080;
     border-collapse: collapse; 
+    margin: auto;
+    text-align: center;
+    font-size: 1em;
+    padding: 0;
 }
+
+header {
+    background-color: #fffa9d; 
+    color: #000080;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+footer {
+    background-color: #fffa9d; 
+    color:#000080;
+    text-align: center;
+    padding: 10px;
+    height: 10vh;
+}
+
+.table_text {
+    padding: 10px;
+}
+    

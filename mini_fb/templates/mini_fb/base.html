@@ -3,14 +3,20 @@
 <html>
     <head>
         <link rel="stylesheet" href={% static "mini_fb/styles.css"%}/>
-        <title>Quotes</title>
+        <title>mini_fb</title>
     </head>
     <body>
-        
+        <header>
+            <h1><strong>Jose's Facebook</strong></h1>
+            <p><em>Welcome to my mini facebook!</em></p>
+        </header>
         <nav>
-            <a href="{% url 'show_all' %}">Show all</a>
+            <a href="{% url 'show_all_profiles' %}">Show all</a>
         </nav>
         {% block content %}
         {% endblock %}
+        <footer>
+            <p> All Rights Reserved by Jose Maria Amusategui Garcia Peri <a href="https://cheersapp.es/terms-conditions.html" target="_blank">Credits</a> &copy;</p>
+        </footer>
     </body>
 </html>
