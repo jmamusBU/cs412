@@ -3,6 +3,7 @@
 # Description: Defines the models for the mini_fb app
 
 from django.db import models
+from django.urls import reverse
 
 
 class Profile(models.Model):
@@ -23,6 +24,10 @@ class Profile(models.Model):
         '''Return a QuerySet of all status messages for this Profile.'''
         messages = StatusMessage.objects.filter(profile=self)
         return messages
+    
+    def get_absolute_url(self):
+        return reverse("show_profile", kwargs={"pk": self.pk})
+    
     
 class StatusMessage(models.Model):
     '''Store a status message for each Profile.'''

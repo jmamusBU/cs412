@@ -2,8 +2,9 @@
 # Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
 # Description: Define the views for the mini_fb app
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from .models import *
+from .forms import CreateProfileForm
 # Create your views here.
 
 class ShowAllProfilesView(ListView):
@@ -17,4 +18,11 @@ class ShowProfilePageView(DetailView):
     model = Profile # the model to display
     template_name = 'mini_fb/show_profile.html'
     context_object_name = 'profile' # context variable to use in the template
+    
+class CreateProfileView(CreateView):
+    '''Displays a page to create a profile'''
+    form_class = CreateProfileForm
+    template_name = 'mini_fb/create_profile_form.html' 
+    
+    
     
