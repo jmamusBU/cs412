@@ -15,7 +15,7 @@ body {
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    
 }
 
 h1 {
@@ -34,6 +34,24 @@ h2 {
     font-size: 3em;
     color: #000000; 
     text-align: center;
+}
+
+h3 { 
+    font-size: 2em;
+    color: #000000; 
+    text-align: center;
+}
+
+.status_list {
+    margin: auto;
+    text-align: center;  
+}
+
+li {
+    margin: auto;
+    display: list-item;
+    list-style-type: circle;
+    padding: 10px;
 }
 
 table, th, td {

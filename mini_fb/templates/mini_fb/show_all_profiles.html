@@ -18,6 +18,7 @@ in the database in the form of a table
             <th class="table_text">Last Name</th>
             <th class="table_text">City</th>
             <th class="table_text">Profile Image</th>
+            <th class="table_text">Profile Link</th>
         </tr>
         {% for p in profiles %}
             <tr>
@@ -25,6 +26,7 @@ in the database in the form of a table
                 <td class="table_text">{{ p.last_name }}</td>
                 <td class="table_text">{{ p.city }}</td>
                 <td><img src="{{ p.image_url }}" alt="image" width="250"></td>
+                <td><a href="{% url 'show_profile' p.pk %}" target="_blank">View Profile</a></td>
             </tr>
             
         {% endfor %}

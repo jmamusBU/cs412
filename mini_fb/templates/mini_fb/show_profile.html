@@ -1,0 +1,47 @@
+{% extends 'mini_fb/base.html' %}
+
+<!--
+File: mini_fb/show_profile.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
+Description: displays the names, cities, and profile images for a single
+profile in the database
+-->
+
+{% block content %}
+
+<h2>Profile</h2>
+
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">First Name</th>
+            <th class="table_text">Last Name</th>
+            <th class="table_text">City</th>
+            <th class="table_text">Email Address</th>
+            <th class="table_text">Profile Image</th>
+        </tr>
+        <tr>
+            <td class="table_text">{{ profile.first_name }}</td>
+            <td class="table_text">{{ profile.last_name }}</td>
+            <td class="table_text">{{ profile.city }}</td>
+            <td class="table_text">{{ profile.email_address }}</td>
+            <td><img src="{{ profile.image_url }}" alt="image" width="450"></td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    {% if profile.get_status_messages%}
+        <h3>Status Messages</h3>
+        <ul class="status_list">
+            {% for s in profile.get_status_messages %}
+                <li>{{ s.message }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3>No Status Messages</h3>
+    {% endif %}
+</div>
+{% endblock %}
+
+
