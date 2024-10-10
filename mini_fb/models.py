@@ -41,3 +41,5 @@ class StatusMessage(models.Model):
         '''Return a string representation of this StatusMessage Object.'''
         return f'{self.profile.first_name} {self.profile.last_name} said {self.message} at {self.created_at}'
     
+    def get_absolute_url(self):
+        return reverse("show_profile", kwargs={"pk": self.profile.pk})

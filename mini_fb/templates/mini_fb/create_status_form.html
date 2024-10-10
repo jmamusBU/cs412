@@ -1,0 +1,12 @@
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+<h3>Create a New Status Message for {{profile.first_name}} {{profile.last_name}}</h3> 
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+</form>
+<br>
+{% endblock %}
