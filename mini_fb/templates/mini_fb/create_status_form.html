@@ -16,4 +16,8 @@ Description: displays a form to create a new status message in the database
     <button type="submit">Create</button>
 </form>
 <br>
+<form action="{% url 'show_profile' profile.pk %}">
+    <button type="submit">Cancel</button>
+</form>
+<br>
 {% endblock %}

@@ -15,4 +15,8 @@ Description: displays a form to create a new profile in the database
     <button type="submit">Create</button>
 </form>
 <br>
+<form action="{% url 'show_all_profiles' %}">
+    <button type="submit">Cancel</button>
+</form>
+<br>
 {% endblock %}
