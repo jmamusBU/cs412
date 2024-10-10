@@ -30,6 +30,7 @@ class CreateStatusMessageView(CreateView):
     template_name = 'mini_fb/create_status_form.html' 
     
     def get_context_data(self, **kwargs):
+        '''Adds the profile to the context data so that the form can be submitted'''
         context = super().get_context_data(**kwargs)
         profile = Profile.objects.get(pk=self.kwargs['pk'])
         context['profile'] = profile 
@@ -39,7 +40,4 @@ class CreateStatusMessageView(CreateView):
         profile = Profile.objects.get(pk=self.kwargs['pk'])
         form.instance.profile = profile
         return super().form_valid(form)
-    
-    
-    
     

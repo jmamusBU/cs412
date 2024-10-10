@@ -1,3 +1,7 @@
+# File: mini_fb/forms.py
+# Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 09/10/2024
+# Description: Defines the forms for the mini_fb app
+
 from django import forms
 from .models import Profile, StatusMessage
 
