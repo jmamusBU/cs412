@@ -39,5 +39,14 @@ class CreateStatusMessageView(CreateView):
     def form_valid(self, form):
         profile = Profile.objects.get(pk=self.kwargs['pk'])
         form.instance.profile = profile
+        # save the status message to database
+        sm = form.save()
+        # read the file from the form:
+        files = self.request.FILES.getlist('files')
+        
+        for f in files:
+            image = Image(status_message=sm, image_file=f)
+            image.save()
+            
         return super().form_valid(form)
     
