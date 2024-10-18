@@ -1,0 +1,31 @@
+{% extends 'mini_fb/base.html' %}
+
+<!--
+File: mini_fb/update_status_form.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 17/10/2024
+Description: displays a form to update a status message in the database
+-->
+
+{% block content %}
+<h3>Update Status Message?</h3> 
+<br>
+<p class="status_text" >{{status_message.message}}</p>
+<br>
+{% if status_message.get_images %}
+    {% for img in status_message.get_images %}
+    <img class="status_img" src="{{img.image_file.url}}" alt="{{img.image_file.url}}" width="250">
+    {% endfor %}
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ form.as_table }}
+    <br>
+    <button type="submit">Update</button>
+</form>
+<br>
+<form action="{% url 'show_profile' status_message.profile.pk %}">
+    <button type="submit">Cancel</button>
+</form>
+<br>
+{% endblock %}

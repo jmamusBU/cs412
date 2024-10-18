@@ -105,3 +105,14 @@ button {
     color: white;
     font-size: calc(15px + 2vw);
 }
+
+.status_img {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.status_text {
+    text-align: center;
+}

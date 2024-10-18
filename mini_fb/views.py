@@ -2,9 +2,9 @@
 # Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
 # Description: Define the views for the mini_fb app
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
-from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusMessageForm
 # Create your views here.
 
 class ShowAllProfilesView(ListView):
@@ -62,3 +62,28 @@ class UpdateProfileView(UpdateView):
         profile = Profile.objects.get(pk=self.kwargs['pk'])
         context['profile'] = profile 
         return context
+    
+class DeleteStatusMessageView(DeleteView):
+    '''Displays a page to delete a status message'''
+    model = StatusMessage
+    template_name = 'mini_fb/delete_status_form.html'
+    context_object_name = 'status_message'
+    
+    def get_success_url(self):
+        pk = self.kwargs.get('pk')
+        status_message = StatusMessage.objects.filter(pk=pk).first()
+        profile = status_message.profile
+        return reverse('show_profile', kwargs={'pk': profile.pk})
+    
+class UpdateStatusMessageView(UpdateView):
+    '''Displays a page to update a status message'''
+    form_class = UpdateStatusMessageForm
+    template_name = 'mini_fb/update_status_form.html'
+    model = StatusMessage
+    context_object_name = 'status_message'
+    
+    def get_success_url(self):
+        pk = self.kwargs.get('pk')
+        status_message = StatusMessage.objects.filter(pk=pk).first()
+        profile = status_message.profile
+        return reverse('show_profile', kwargs={'pk': profile.pk})

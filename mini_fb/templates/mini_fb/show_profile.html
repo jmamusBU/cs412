@@ -40,9 +40,12 @@ profile in the database
                 <li>{{ s.message }}</li>
                 {% if s.get_images %}
                     {% for img in s.get_images %}
-                    <img src="{{img.image_file.url}}" alt="{{img.image_file.url}}" width="250">
+                    <img class="status_img" src="{{img.image_file.url}}" alt="{{img.image_file.url}}" width="250">
                     {% endfor %}
                 {% endif %}
+                <br>
+                <a href="{% url 'update_status' s.pk %}" target="_blank">Update</a>
+                <a href="{% url 'delete_status' s.pk %}" target="_blank">Delete</a>
             {% endfor %}
         </ul>
     {% else %}
