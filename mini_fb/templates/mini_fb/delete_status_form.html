@@ -8,7 +8,7 @@ Description: displays a form to delete a status message in the database
 
 {% block content %}
 <h3>Delete Status Message?</h3> 
-<p>{{status_message.message}}</p>
+<p class="status_text">{{status_message.message}}</p>
 {% if status_message.get_images %}
     {% for img in status_message.get_images %}
     <img class="status_img" src="{{img.image_file.url}}" alt="{{img.image_file.url}}" width="250">

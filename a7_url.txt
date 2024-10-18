@@ -1,1 +1,1 @@
-http://127.0.0.1:8000/mini_fb/
+https://mini-fb-jma-35d8d984dcca.herokuapp.com/mini_fb/
