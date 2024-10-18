@@ -10,7 +10,8 @@ class Article(models.Model):
     author = models.TextField(blank=False)
     text = models.TextField(blank=False)
     published = models.DateField(auto_now=True)
-    image_url = models.URLField(blank=True)
+    #image_url = models.URLField(blank=True)
+    image_file = models.ImageField(blank=True) ## NEW
     
     def __str__(self):
         '''Return a string representation of this Article Object.'''

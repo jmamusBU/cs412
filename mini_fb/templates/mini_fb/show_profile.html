@@ -37,6 +37,11 @@ profile in the database
         <ul class="status_list">
             {% for s in profile.get_status_messages %}
                 <li>{{ s.message }}</li>
+                {% if s.get_images %}
+                    {% for img in s.get_images %}
+                    <img src="{{img.image_file.url}}" alt="{{img.image_file.url}}" width="250">
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
         </ul>
     {% else %}

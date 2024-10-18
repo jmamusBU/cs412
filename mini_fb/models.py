@@ -43,3 +43,18 @@ class StatusMessage(models.Model):
     
     def get_absolute_url(self):
         return reverse("show_profile", kwargs={"pk": self.profile.pk})
+    
+    def get_images(self):
+        '''Return a QuerySet of all images for this StatusMessage.'''
+        images = Image.objects.filter(status_message=self)
+        return images
+    
+class Image(models.Model):
+    '''Stores an image for a StatusMessage'''
+    
+    # data attributes of an Image
+    image_file = models.ImageField(blank=True)
+    status_message = models.ForeignKey("StatusMessage", on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+    
+    
