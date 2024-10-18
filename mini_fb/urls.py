@@ -4,7 +4,7 @@
 
 from django.urls import path
 from django.conf import settings
-from .views import ShowAllProfilesView, ShowProfilePageView, CreateProfileView, CreateStatusMessageView
+from .views import *
 
 # all of the URLs that are part of this app
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
     path(r'profile/<int:pk>', ShowProfilePageView.as_view(), name="show_profile"),
     path(r'create_profile', CreateProfileView.as_view(), name="create_profile"),
     path(r'profile/<int:pk>/create_status', CreateStatusMessageView.as_view(), name="create_status"),   
+    path(r'profile/<int:pk>/update', UpdateProfileView.as_view(), name="update_profile"),
 ]

@@ -2,9 +2,9 @@
 # Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
 # Description: Define the views for the mini_fb app
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import *
-from .forms import CreateProfileForm, CreateStatusMessageForm
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 # Create your views here.
 
 class ShowAllProfilesView(ListView):
@@ -50,3 +50,15 @@ class CreateStatusMessageView(CreateView):
             
         return super().form_valid(form)
     
+class UpdateProfileView(UpdateView):
+    '''Displays a page to update a profile'''
+    form_class = UpdateProfileForm
+    template_name = 'mini_fb/update_profile_form.html'
+    model = Profile
+    
+    def get_context_data(self, **kwargs):
+        '''Adds the profile to the context data so that the form can be submitted'''
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        context['profile'] = profile 
+        return context

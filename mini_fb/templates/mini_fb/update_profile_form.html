@@ -1,0 +1,22 @@
+{% extends 'mini_fb/base.html' %}
+
+<!--
+File: mini_fb/update_profile_form.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 17/10/2024
+Description: displays a form to update a profile in the database
+-->
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ form.as_table }}
+    <br>
+    <button type="submit">Update</button>
+</form>
+<br>
+<form action="{% url 'show_profile' profile.pk %}">
+    <button type="submit">Cancel</button>
+</form>
+<br>
+{% endblock %}
