@@ -28,6 +28,17 @@ class Profile(models.Model):
     def get_absolute_url(self):
         return reverse("show_profile", kwargs={"pk": self.pk})
     
+    def get_friends(self):
+        '''Return a list of all friends for this Profile.'''
+        friends_objects = Friend.objects.filter(profile1=self) | Friend.objects.filter(profile2=self)
+        friends = []
+        for f in friends_objects:
+            if f.profile1 == self:
+                friends.append(f.profile2)
+            else:
+                friends.append(f.profile1)
+        return list(friends)
+    
     
 class StatusMessage(models.Model):
     '''Store a status message for each Profile.'''
@@ -57,4 +68,15 @@ class Image(models.Model):
     status_message = models.ForeignKey("StatusMessage", on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
     
+class Friend(models.Model):
+    '''Stores a friendship between two Profiles.'''
+    
+    # data attributes of a Friend
+    profile1 = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="profile1")
+    profile2 = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="profile2")
+    timestamp = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        '''Return a string representation of this Friend Object.'''
+        return f'{self.profile1.first_name} {self.profile1.last_name} is homies with {self.profile2.first_name} {self.profile2.last_name}'
     
