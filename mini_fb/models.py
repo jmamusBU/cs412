@@ -39,6 +39,22 @@ class Profile(models.Model):
                 friends.append(f.profile1)
         return list(friends)
     
+    def add_friend(self, other):
+        '''adds a friend to this Profile.'''
+        if self == other:
+            raise ValueError("Self love.")
+        if self in other.get_friends():
+            raise ValueError("Duplicate friendship.")
+        Friend.objects.create(profile1=self, profile2=other)
+        
+    def get_friend_suggestions(self):
+        '''Return a list of friend suggestions for the Profile.'''
+        friends = self.get_friends()
+        suggestions = Profile.objects.exclude(pk=self.pk)
+        for f in friends:
+            suggestions = suggestions.exclude(pk=f.pk)
+        return list(suggestions)
+    
     
 class StatusMessage(models.Model):
     '''Store a status message for each Profile.'''

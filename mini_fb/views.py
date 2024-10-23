@@ -1,8 +1,9 @@
 # File: mini_fb/models.py
 # Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
 # Description: Define the views for the mini_fb app
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django import *
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from .models import *
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusMessageForm
 # Create your views here.
@@ -87,3 +88,24 @@ class UpdateStatusMessageView(UpdateView):
         status_message = StatusMessage.objects.filter(pk=pk).first()
         profile = status_message.profile
         return reverse('show_profile', kwargs={'pk': profile.pk})
+    
+class CreateFriendView(View):
+    '''processes a request to add a friend to a profile'''
+    def dispatch(self, request, *args, **kwargs):
+        pk1 = self.kwargs.get('pk')
+        pk2 = self.kwargs.get('other_pk')
+        profile1 = Profile.objects.get(pk=pk1)
+        profile2 = Profile.objects.get(pk=pk2)
+        profile1.add_friend(profile2)
+        return redirect('show_profile', pk=pk1)
+    
+    def get_success_url(self):
+        pk = self.kwargs.get('pk')
+        return reverse('show_profile', kwargs={'pk': pk})
+    
+    
+class ShowFriendSuggestionsView(DetailView):
+    '''Displays a page to show friend suggestions for a given profile'''
+    model = Profile
+    template_name = 'mini_fb/friend_suggestions.html'
+    context_object_name = 'profile'
