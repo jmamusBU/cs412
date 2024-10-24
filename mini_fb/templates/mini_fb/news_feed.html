@@ -1,0 +1,35 @@
+{% extends 'mini_fb/base.html' %}
+
+<!--
+File: mini_fb/news_feed.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 24/10/2024
+Description: displays the news feed for the given profile
+-->
+
+{% block content %}
+
+
+<h2>News Feed for {{profile.first_name}} {{profile.last_name}}</h2>
+<h3><a href="{% url 'show_profile' profile.pk %}" >Back to {{profile.first_name}}'s Page</a></h3>
+
+<div>
+    {% if profile.get_news_feed %}
+        <h3>Posts</h3>
+        <ul class="status_list">
+            {% for s in profile.get_news_feed %}
+                <li><img src="{{s.profile.image_url}}" alt="profile image" width="50" style="border-radius: 50%"> {{s.profile.first_name}} {{s.profile.last_name}} {{s.created_at}} </li>
+                <li>{{ s.message }}</li>
+                {% if s.get_images %}
+                    {% for img in s.get_images %}
+                    <img class="status_img" src="{{img.image_file.url}}" alt="{{img.image_file.url}}" width="250">
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3>No Posts</h3>
+    {% endif %}
+</div>
+{% endblock %}
+
+

@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.urls import reverse
+import random
 
 
 class Profile(models.Model):
@@ -55,6 +56,27 @@ class Profile(models.Model):
             suggestions = suggestions.exclude(pk=f.pk)
         return list(suggestions)
     
+    def get_news_feed(self):
+        
+        def sorted(messages):
+            for i in range(1, len(messages)):
+                if messages[i - 1].created_at < messages[i].created_at:
+                    return False
+            return True
+        
+        def bogosort(messages):
+            while sorted(messages) != True:
+                random.shuffle(messages)
+            return messages
+        
+        friends = self.get_friends()
+        messages = []
+        for f in friends:
+            messages += f.get_status_messages()
+        messages += self.get_status_messages()
+        # need to sort descending
+        messages = bogosort(messages)
+        return messages
     
 class StatusMessage(models.Model):
     '''Store a status message for each Profile.'''
@@ -86,7 +108,7 @@ class Image(models.Model):
     
 class Friend(models.Model):
     '''Stores a friendship between two Profiles.'''
-    
+
     # data attributes of a Friend
     profile1 = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="profile1")
     profile2 = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="profile2")
