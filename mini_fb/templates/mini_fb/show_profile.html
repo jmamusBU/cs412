@@ -8,9 +8,11 @@ profile in the database
 -->
 
 {% block content %}
+{% if request.user.is_authenticated and request.user == profile.user %}
 <a href="{% url 'create_status' profile.pk %}" target="_blank">Create New Status Message</a>
 <a href="{% url 'update_profile' profile.pk %}" target="_blank">Update Profile</a>
 <a href="{% url 'news_feed' profile.pk %}" target="_blank">News Feed</a>
+{% endif %}
 
 <h2>Profile</h2>
 
@@ -45,8 +47,10 @@ profile in the database
                     {% endfor %}
                 {% endif %}
                 <br>
+                {% if request.user.is_authenticated and request.user == profile.user %}
                 <a href="{% url 'update_status' s.pk %}" target="_blank">Update</a>
                 <a href="{% url 'delete_status' s.pk %}" target="_blank">Delete</a>
+                {% endif %}
             {% endfor %}
         </ul>
     {% else %}
@@ -75,9 +79,11 @@ profile in the database
     {% endif %}
 </div>
 <br>
+{% if request.user.is_authenticated and request.user == profile.user %}
 <h3>
 <a href="{% url 'friend_suggestions' profile.pk %}" target="_blank">Friend Suggestions</a>
 </h3>
+{% endif %}
 {% endblock %}
 
 

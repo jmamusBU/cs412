@@ -1,12 +1,20 @@
 # File: mini_fb/models.py
 # Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
 # Description: Define the views for the mini_fb app
-from django import *
+
+from django.http import HttpRequest
+from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
-from .models import *
-from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusMessageForm
-# Create your views here.
+from django.urls import reverse
+from typing import Any
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View 
+from .models import * ## import the models (e.g., Article)
+from .forms import * ## import the forms (e.g., CreateCommentForm)
+from django.contrib.auth.mixins import LoginRequiredMixin 
+from django.contrib.auth.forms import UserCreationForm ## NEW
+from django.contrib.auth.models import User ## NEW
+from django.contrib.auth import login ## NEW
+import random
 
 class ShowAllProfilesView(ListView):
     '''Generic view to display all profiles'''
@@ -25,10 +33,28 @@ class CreateProfileView(CreateView):
     form_class = CreateProfileForm
     template_name = 'mini_fb/create_profile_form.html' 
     
-class CreateStatusMessageView(CreateView):
+    def get_login_url(self):
+        '''return the URL of the login page'''
+        return reverse('login')
+    
+    def form_valid(self, form):
+        '''This method is called as port of the form processing'''
+        
+        print(f'CreateProfileView.form_valid(): form.cleaned_data={form.cleaned_data}')
+        
+        user = self.request.user
+        
+        form.instance.user = user
+        return super().form_valid(form)
+    
+class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     '''Displays a page to create a status message'''
     form_class = CreateStatusMessageForm
     template_name = 'mini_fb/create_status_form.html' 
+    
+    def get_login_url(self):
+        '''return the URL of the login page'''
+        return reverse('login')
     
     def get_context_data(self, **kwargs):
         '''Adds the profile to the context data so that the form can be submitted'''
@@ -51,11 +77,15 @@ class CreateStatusMessageView(CreateView):
             
         return super().form_valid(form)
     
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     '''Displays a page to update a profile'''
     form_class = UpdateProfileForm
     template_name = 'mini_fb/update_profile_form.html'
     model = Profile
+    
+    def get_login_url(self):
+        '''return the URL of the login page'''
+        return reverse('login')
     
     def get_context_data(self, **kwargs):
         '''Adds the profile to the context data so that the form can be submitted'''
@@ -64,11 +94,15 @@ class UpdateProfileView(UpdateView):
         context['profile'] = profile 
         return context
     
-class DeleteStatusMessageView(DeleteView):
+class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
     '''Displays a page to delete a status message'''
     model = StatusMessage
     template_name = 'mini_fb/delete_status_form.html'
     context_object_name = 'status_message'
+    
+    def get_login_url(self):
+        '''return the URL of the login page'''
+        return reverse('login')
     
     def get_success_url(self):
         pk = self.kwargs.get('pk')
@@ -76,21 +110,30 @@ class DeleteStatusMessageView(DeleteView):
         profile = status_message.profile
         return reverse('show_profile', kwargs={'pk': profile.pk})
     
-class UpdateStatusMessageView(UpdateView):
+class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
     '''Displays a page to update a status message'''
     form_class = UpdateStatusMessageForm
     template_name = 'mini_fb/update_status_form.html'
     model = StatusMessage
     context_object_name = 'status_message'
     
+    def get_login_url(self):
+        '''return the URL of the login page'''
+        return reverse('login')
+    
     def get_success_url(self):
         pk = self.kwargs.get('pk')
         status_message = StatusMessage.objects.filter(pk=pk).first()
         profile = status_message.profile
         return reverse('show_profile', kwargs={'pk': profile.pk})
     
-class CreateFriendView(View):
+class CreateFriendView(LoginRequiredMixin, View):
     '''processes a request to add a friend to a profile'''
+    
+    def get_login_url(self):
+        '''return the URL of the login page'''
+        return reverse('login')
+    
     def dispatch(self, request, *args, **kwargs):
         pk1 = self.kwargs.get('pk')
         pk2 = self.kwargs.get('other_pk')

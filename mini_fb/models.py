@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 import random
 
 
@@ -16,6 +17,8 @@ class Profile(models.Model):
     city = models.TextField(blank=False)
     email_address = models.TextField(blank=False)
     image_url = models.URLField(blank=True)
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
         '''Return a string representation of this Profile Object.'''
@@ -65,9 +68,12 @@ class Profile(models.Model):
             return True
         
         def bogosort(messages):
+            c = 0
             while sorted(messages) != True:
                 random.shuffle(messages)
-            return messages
+                c += 1
+            return messages 
+            #+ [f"Sorted in {c} iterations."]
         
         friends = self.get_friends()
         messages = []

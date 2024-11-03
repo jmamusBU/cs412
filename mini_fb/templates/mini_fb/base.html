@@ -19,6 +19,12 @@ Description: base template for mini_fb app, providing a header, nav, and footer
             <a href="{% url 'show_all_profiles' %}">Show all</a>
             <a href="{% url 'create_profile' %}">Create Profile</a>  
         </nav>
+        {% if request.user.is_authenticated %}
+        <p>BALLS: {{request.user}}</p>
+        {% else %}
+        <p>NO BALLS</p>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
         <footer>
