@@ -52,6 +52,9 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     form_class = CreateStatusMessageForm
     template_name = 'mini_fb/create_status_form.html' 
     
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+    
     def get_login_url(self):
         '''return the URL of the login page'''
         return reverse('login')
@@ -59,12 +62,12 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         '''Adds the profile to the context data so that the form can be submitted'''
         context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        profile = Profile.objects.get(user=self.request.user)
         context['profile'] = profile 
         return context
     
     def form_valid(self, form):
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        profile = Profile.objects.get(user=self.request.user)
         form.instance.profile = profile
         # save the status message to database
         sm = form.save()
@@ -83,6 +86,9 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'mini_fb/update_profile_form.html'
     model = Profile
     
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+    
     def get_login_url(self):
         '''return the URL of the login page'''
         return reverse('login')
@@ -90,7 +96,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         '''Adds the profile to the context data so that the form can be submitted'''
         context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        profile = Profile.objects.get(user=self.request.user)
         context['profile'] = profile 
         return context
     
@@ -130,6 +136,9 @@ class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
 class CreateFriendView(LoginRequiredMixin, View):
     '''processes a request to add a friend to a profile'''
     
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+    
     def get_login_url(self):
         '''return the URL of the login page'''
         return reverse('login')
@@ -137,14 +146,11 @@ class CreateFriendView(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
         pk1 = self.kwargs.get('pk')
         pk2 = self.kwargs.get('other_pk')
-        profile1 = Profile.objects.get(pk=pk1)
+        profile1 = Profile.objects.get(user=self.request.user)
         profile2 = Profile.objects.get(pk=pk2)
         profile1.add_friend(profile2)
-        return redirect('show_profile', pk=pk1)
+        return redirect(profile1.get_absolute_url())
     
-    def get_success_url(self):
-        pk = self.kwargs.get('pk')
-        return reverse('show_profile', kwargs={'pk': pk})
     
     
 class ShowFriendSuggestionsView(DetailView):
@@ -153,7 +159,44 @@ class ShowFriendSuggestionsView(DetailView):
     template_name = 'mini_fb/friend_suggestions.html'
     context_object_name = 'profile'
     
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+    
 class ShowNewsFeedView(DetailView):
     '''Displays a page to show the news feed for a given profile'''
     model = Profile
     template_name = 'mini_fb/news_feed.html'
+    
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+    
+
+class RegistrationView(CreateView):
+    '''Handle registration of a new user'''
+    
+    template_name = 'mini_fb/registration.html'
+    form_class = UserCreationForm
+    
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        '''Handle the user creation form submission'''
+        
+        if self.request.POST:
+            print(f"RegistrationView.dispatch: self.request.POST={self.request.POST}")
+            
+            form = UserCreationForm(self.request.POST)
+            
+            if not form.is_valid():
+                print(f"form.errors={form.errors}")
+
+                return super().dispatch(request, *args, **kwargs)
+            
+            user = form.save()
+            
+            print(f"user={user}")
+            
+            login(self.request, user)
+            print(f"User {user} logged in.")
+            
+        
+        return super().dispatch(request, *args, **kwargs)
+    

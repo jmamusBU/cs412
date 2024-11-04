@@ -16,13 +16,24 @@ Description: base template for mini_fb app, providing a header, nav, and footer
             <p><em>Welcome to my mini facebook!</em></p>
         </header>
         <nav>
-            <a href="{% url 'show_all_profiles' %}">Show all</a>
-            <a href="{% url 'create_profile' %}">Create Profile</a>  
+            <a href="{% url 'show_all_profiles' %}">Show all</a> 
         </nav>
         {% if request.user.is_authenticated %}
+        
         <p>BALLS: {{request.user}}</p>
+        {% if request.user.profile_set.first %}
+        <a href="{{ request.user.profile_set.first.get_absolute_url }}" target="_blank">View Profile</a>
+        {% else  %}
+        <a href="{% url 'create_profile' %}">Create Profile</a> 
+        {% endif %}
+
+        <form action="{% url 'logout' %}" method="post" class="logout">
+            {% csrf_token %}
+            <button type="submit" class="logout">Logout</button>
+        </form>
         {% else %}
         <p>NO BALLS</p>
+        <a href="{% url 'login' %}">Login</a>
         {% endif %}
 
         {% block content %}

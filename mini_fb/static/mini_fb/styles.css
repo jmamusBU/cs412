@@ -18,6 +18,18 @@ body {
     
 }
 
+.logout {
+    margin: 0;
+    display: inline;
+    border: none;
+    background: none;
+    text-decoration: underline;
+    font: inherit;
+    color: blue;
+    padding: 0;
+    cursor: pointer;
+}
+
 h1 {
     color: #000080; 
     text-align: left;
