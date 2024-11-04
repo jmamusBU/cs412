@@ -75,6 +75,8 @@ table, th, td {
     padding: 0;
 }
 
+
+
 header {
     background-color: #fffa9d; 
     color: #000080;
@@ -102,20 +104,20 @@ form {
     display: flex;
     flex-direction: column;
     max-width: 250px;
-    max-height: 50%;
+    max-height: 65%;
 }
 
 button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: auto;
-    padding: 20px;
+    margin: 5px auto;
+    padding: 10px;
     border: none;
     border-radius: 100px;
     background-color: #000080;
     color: white;
-    font-size: calc(15px + 2vw);
+    font-size: 1.2em;
 }
 
 .status_img {

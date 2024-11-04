@@ -47,6 +47,37 @@ class CreateProfileView(CreateView):
         form.instance.user = user
         return super().form_valid(form)
     
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        user_form = UserCreationForm()
+        context['user_form'] = user_form
+        return context
+    
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        '''Handle the user creation form submission'''
+        
+        if self.request.POST:
+            print(f"CreateProfileView.dispatch: self.request.POST={self.request.POST}")
+            
+            user_form = UserCreationForm(self.request.POST)
+            
+            if not user_form.is_valid():
+                print(f"form.errors={form.errors}")
+
+                return super().dispatch(request, *args, **kwargs)
+            
+            user = user_form.save()
+            
+            
+            print(f"user={user}")
+            
+            login(self.request, user)
+            print(f"User {user} logged in.")
+            
+        
+        return super().dispatch(request, *args, **kwargs)
+        
+    
 class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     '''Displays a page to create a status message'''
     form_class = CreateStatusMessageForm
@@ -169,34 +200,4 @@ class ShowNewsFeedView(DetailView):
     
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
-    
-
-class RegistrationView(CreateView):
-    '''Handle registration of a new user'''
-    
-    template_name = 'mini_fb/registration.html'
-    form_class = UserCreationForm
-    
-    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-        '''Handle the user creation form submission'''
-        
-        if self.request.POST:
-            print(f"RegistrationView.dispatch: self.request.POST={self.request.POST}")
-            
-            form = UserCreationForm(self.request.POST)
-            
-            if not form.is_valid():
-                print(f"form.errors={form.errors}")
-
-                return super().dispatch(request, *args, **kwargs)
-            
-            user = form.save()
-            
-            print(f"user={user}")
-            
-            login(self.request, user)
-            print(f"User {user} logged in.")
-            
-        
-        return super().dispatch(request, *args, **kwargs)
     

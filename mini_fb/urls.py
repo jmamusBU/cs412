@@ -23,5 +23,4 @@ urlpatterns = [
     path(r'profile/news_feed', ShowNewsFeedView.as_view(), name="news_feed"),
     path('login/', auth_views.LoginView.as_view(template_name='mini_fb/login.html'), name='login'),
     path(r'logout/', auth_views.LogoutView.as_view(template_name='mini_fb/logged_out.html'), name='logout'),
-    path('register/', views.RegistrationView.as_view(), name='register'),
 ]

@@ -20,11 +20,10 @@ Description: base template for mini_fb app, providing a header, nav, and footer
         </nav>
         {% if request.user.is_authenticated %}
         
-        <p>BALLS: {{request.user}}</p>
+        <p>Logged in as: {{request.user}}</p>
         {% if request.user.profile_set.first %}
         <a href="{{ request.user.profile_set.first.get_absolute_url }}" target="_blank">View Profile</a>
-        {% else  %}
-        <a href="{% url 'create_profile' %}">Create Profile</a> 
+        
         {% endif %}
 
         <form action="{% url 'logout' %}" method="post" class="logout">
@@ -32,8 +31,9 @@ Description: base template for mini_fb app, providing a header, nav, and footer
             <button type="submit" class="logout">Logout</button>
         </form>
         {% else %}
-        <p>NO BALLS</p>
+        <p>Not Logged in</p>
         <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'create_profile' %}">Create Profile</a> 
         {% endif %}
 
         {% block content %}

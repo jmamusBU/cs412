@@ -9,12 +9,25 @@ Description: displays a form to create a new profile in the database
 {% block content %}
 <form method="POST">
     {% csrf_token %}
-    
-    {{ form.as_table }}
-    <br>
+    <p>Username</p>
+    {{ user_form.username }}
+    <p>Password</p>
+    {{ user_form.password1 }}
+    <p>Confirm Password</p>
+    {{ user_form.password2 }}
+    <p>First Name</p>
+    {{ form.first_name }}
+    <p>Last Name</p>
+    {{ form.last_name }}
+    <p>City</p>
+    {{ form.city }}
+    <p>Email</p>
+    {{ form.email_address }}
+    <p>Image URL</p>
+    {{ form.image_url }}
+
     <button type="submit">Create</button>
 </form>
-<br>
 <form action="{% url 'show_all_profiles' %}">
     <button type="submit">Cancel</button>
 </form>
