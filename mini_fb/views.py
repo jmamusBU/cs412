@@ -62,7 +62,7 @@ class CreateProfileView(CreateView):
             user_form = UserCreationForm(self.request.POST)
             
             if not user_form.is_valid():
-                print(f"form.errors={form.errors}")
+                print(f"form.errors={user_form.errors}")
 
                 return super().dispatch(request, *args, **kwargs)
             
