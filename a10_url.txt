@@ -1,0 +1,1 @@
+https://voter-analytics-jma-bcc599141f86.herokuapp.com/voter_analytics
