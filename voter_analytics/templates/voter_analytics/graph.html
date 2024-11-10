@@ -1,0 +1,19 @@
+{% extends 'voter_analytics/base.html' %}
+{% block content %}
+<div>
+    {% include 'voter_analytics/graph_search.html' with og_dob_list=og_dob_list %}
+</div> 
+<h1>Graphs</h1>
+
+<div>
+    {{bar_div|safe}}
+</div>
+
+<div>
+    {{pie_div|safe}}
+</div>
+
+<div>
+    {{hist_div|safe}}
+</div>
+{% endblock %}

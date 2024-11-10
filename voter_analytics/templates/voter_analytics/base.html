@@ -1,0 +1,28 @@
+{% load static %}
+<!--
+File: mini_fb/base.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
+Description: base template for mini_fb app, providing a header, nav, and footer
+-->
+
+<html>
+    <head>
+        <link rel="stylesheet" href={% static "voter_analytics/styles.css"%}/>
+        <title>Voter Analytics</title>
+    </head>
+    <body>
+        <header>
+            <h1><strong>Jose's Voter Analytics</strong></h1>
+        </header>
+        <nav>
+            <a href="{% url 'voters' %}">Show all</a> 
+            <a href="{% url 'graphs' %}">Graphs</a>
+        </nav>
+
+        {% block content %}
+        {% endblock %}
+        <footer>
+            <p> All Rights Reserved by Jose Maria Amusategui Garcia Peri <a href="https://cheersapp.es/terms-conditions.html" target="_blank">Credits</a> &copy;</p>
+        </footer>
+    </body>
+</html>

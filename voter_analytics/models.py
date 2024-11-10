@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max, Min
 
 # Create your models here.
 
@@ -13,7 +14,7 @@ class Voter(models.Model):
     dor = models.DateField()
     party = models.TextField()
     precinct = models.TextField()
-    state = models.TextField()
+    state = models.BooleanField()
     v21town = models.BooleanField()
     primary = models.BooleanField()
     general = models.BooleanField()
@@ -42,23 +43,23 @@ def load_data():
             fields = line.split(',')
             
             result = Voter(
-                    last_name = fields[1],
-                    first_name = fields[2],
+                    last_name = fields[1].strip(),
+                    first_name = fields[2].strip(),
                     
-                    address_number = int(fields[3]),
-                    address_street = fields[4],
-                    address_apt = fields[5],
-                    address_zip = fields[6],
-                    dob = fields[7],
-                    dor = fields[8],
-                    party = fields[9],
-                    precinct = fields[10],
-                    state = get_bool(fields[11]),
-                    v21town = get_bool(fields[12]),
-                    primary = get_bool(fields[13]),
-                    general = get_bool(fields[14]),
-                    v23town = get_bool(fields[15]),
-                    voter_score = fields[16]
+                    address_number = int(fields[3].strip()),
+                    address_street = fields[4].strip(),
+                    address_apt = fields[5].strip(),
+                    address_zip = fields[6].strip(),
+                    dob = fields[7].strip(),
+                    dor = fields[8].strip(),
+                    party = fields[9].strip(),
+                    precinct = fields[10].strip(),
+                    state = get_bool(fields[11].strip()),
+                    v21town = get_bool(fields[12].strip()),
+                    primary = get_bool(fields[13].strip()),
+                    general = get_bool(fields[14].strip()),
+                    v23town = get_bool(fields[15].strip()),
+                    voter_score = int(fields[16].strip())
                     )
             result.save()
             print(f'Created: {result}')

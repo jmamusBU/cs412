@@ -11,6 +11,8 @@ from . import views
 
 # all of the URLs that are part of this app
 urlpatterns = [
-    path(r'', views.BallsView, name='show_all_profiles'),
-
+    path(r'', views.VoterListView.as_view(), name='voters'),
+    path(r'search', views.search, name='search'),
+    path(r'voter/<int:pk>', views.VoterView.as_view(), name='voter'),
+    path(r'graphs', views.GraphView.as_view(), name='graphs'),
 ]

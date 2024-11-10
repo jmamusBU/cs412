@@ -1,0 +1,82 @@
+<h3>Search</h3>
+
+<form action="{% url 'graphs' %}">
+<table>
+    <tr>
+        <th>Party Affiliation</th>
+        <td>
+            <select name="party">
+                <option value="Any">Any</option>
+                <option value="D">Democrat</option>
+                <option value="R">Republican</option>
+                <option value="U">Unaffiliated</option>
+                <option value="CC">Constitution</option>
+                <option value="L">Libertarian</option>
+                <option value="T">Tea Party</option>
+                <option value="O">Other</option>
+                <option value="G">Green</option>
+                <option value="J">Independent</option>
+                <option value="Q">Reform</option>
+                <option value="FF">Freedom</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Minimum Date of Birth</th>
+        <td>
+            <select name="min_dob">
+                <option value="Any">Any</option>
+                {% for d in og_dob_list %}
+                    <option value="{{ d }}">{{ d }}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Maximum Date of Birth</th>
+        <td>
+            <select name="max_dob">
+                <option value="Any">Any</option>
+                {% for d in og_dob_list reversed %}
+                    <option value="{{ d }}">{{ d }}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Voter Score</th>
+        <td>
+            <select name="voter_score">
+                <option value="Any">Any</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Voted in Elections</th>
+        <td>
+            <input type="checkbox" id="v20state" name="v20state">
+            <label for="v20state">2020 State Election</label>
+            <input type="checkbox" id="v21town" name="v21town">
+            <label for="v21town">2021 Town Election</label>
+            <input type="checkbox" id="v21primary" name="v21primary">
+            <label for="v21primary">Primary Election</label>
+            <input type="checkbox" id="v22general" name="v22general">
+            <label for="v22general">2022 General Election</label>
+            <input type="checkbox" id="v23town" name="v23town">
+            <label for="v23town">2023 Town Election</label>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input type="submit">
+        </td>
+    </tr>
+</table>
+</form>
