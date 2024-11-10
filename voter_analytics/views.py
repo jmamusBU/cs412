@@ -9,12 +9,14 @@ import plotly.graph_objects as go
 # Create your views here.
 
 class VoterListView(ListView):
+    '''Displays a list of all voters'''
     model = Voter
     template_name = 'voter_analytics/results.html'
     context_object_name = 'voters'
     paginate_by = 100
     
     def get_context_data(self, **kwargs: Any):
+        '''Adds context for search filters'''
         context = super().get_context_data(**kwargs)
         
         min_dob = Voter.objects.aggregate(Min('dob'))
@@ -28,6 +30,7 @@ class VoterListView(ListView):
         return context
     
     def get_queryset(self):
+        '''Filters records shown depending on user input'''
         qs = super().get_queryset()
         
         qs = Voter.objects.all()
@@ -72,6 +75,7 @@ class VoterListView(ListView):
         return qs.order_by('last_name', 'first_name')
         
 def search(request):
+    '''Displays search form, for testing'''
     template_name = 'voter_analytics/search.html'
     min_dob = Voter.objects.aggregate(Min('dob'))
     min_dob_year = min_dob.get('dob__min').year
@@ -88,16 +92,19 @@ def search(request):
     return render(request, template_name, context) 
 
 class VoterView(DetailView):
+    '''Displays a detailed page for each voter'''
     model = Voter
     template_name = 'voter_analytics/voter.html'
     context_object_name = 'v'
     
 class GraphView(ListView):
+    '''Displays several graphs to show voter data'''
     model = Voter
     template_name = 'voter_analytics/graph.html'
     context_object_name = 'voters'
     
     def get_queryset(self):
+        '''Filters records shown depending on user input'''
         qs = super().get_queryset()
         
         qs = Voter.objects.all()
@@ -142,6 +149,7 @@ class GraphView(ListView):
         return qs.order_by('last_name', 'first_name')
     
     def get_context_data(self, **kwargs: Any):
+        '''Adds context for search filters'''
         context = super().get_context_data(**kwargs)
         
         qs = self.get_queryset()

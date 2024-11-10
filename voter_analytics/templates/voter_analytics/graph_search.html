@@ -1,4 +1,10 @@
-<h3>Search</h3>
+<!--
+File: voter_analytics/graph_search.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/11/2024
+Description: Provides search filters for the voter graphs page
+-->
+
+<h3>Search Filters</h3>
 
 <form action="{% url 'graphs' %}">
 <table>
@@ -72,11 +78,6 @@
             <label for="v23town">2023 Town Election</label>
         </td>
     </tr>
-    <tr>
-        <td></td>
-        <td>
-            <input type="submit">
-        </td>
-    </tr>
 </table>
+<button type="submit">Search</button>
 </form>

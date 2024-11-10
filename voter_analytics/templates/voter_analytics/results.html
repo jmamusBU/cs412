@@ -1,9 +1,15 @@
+<!--
+File: voter_analytics/results.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/11/2024
+Description: Template to show all voter data with filtering options
+-->
+
 {% extends "voter_analytics/base.html" %}
 {% block content %}
 <div>
     {% include 'voter_analytics/search.html' with dob_list=dob_list %}
 </div> 
-<h1>All Voters</h1>
+<h2>All Voters</h2>
 <table>
     <tbody>
         <tr>

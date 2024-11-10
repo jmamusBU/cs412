@@ -4,6 +4,7 @@ from django.db.models import Max, Min
 # Create your models here.
 
 class Voter(models.Model):
+    '''Defines the attributes for a voter object'''
     first_name = models.TextField()
     last_name = models.TextField()
     address_number = models.IntegerField()
@@ -22,6 +23,7 @@ class Voter(models.Model):
     voter_score = models.IntegerField()
     
     def __str__(self):
+        '''string representation of a voter object'''
         return f'{self.first_name} {self.last_name}'
     
 def load_data():
