@@ -100,7 +100,7 @@ class VoterView(DetailView):
 class GraphView(ListView):
     '''Displays several graphs to show voter data'''
     model = Voter
-    template_name = 'voter_analytics/graph.html'
+    template_name = 'voter_analytics/graphs.html'
     context_object_name = 'voters'
     
     def get_queryset(self):
