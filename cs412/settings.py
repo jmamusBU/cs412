@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'blog',
     'mini_fb',
     'voter_analytics',
+    'project',
     
 ]
 
@@ -135,6 +136,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'restaurant/static'),
     os.path.join(BASE_DIR, 'mini_fb/static'),
     os.path.join(BASE_DIR, 'voter_analytics/static'),
+    os.path.join(BASE_DIR, 'project/static'),
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
