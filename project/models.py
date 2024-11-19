@@ -1,5 +1,38 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+#import pyrebase
+from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import os
+
+cred = credentials.Certificate("cheers-460f2-fd5e3013b68e.json")
+
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+
+def test_data():
+    result = db.collection('locations_v2').document("LlnX4nPSdFPlnyckEJiR").get().to_dict()
+    print(result)
+    return result
+
+
+load_dotenv()
+
+API_KEY=os.getenv("API_KEY")
+
+config = {
+  "apiKey": API_KEY,
+  "authDomain": "cheers-460f2.firebaseapp.com",
+  "projectId": "cheers-460f2",
+  "storageBucket": "cheers-460f2.appspot.com",
+  "appId": "1:765440259273:web:0925849297ff916903c918",
+  "measurementId": "G-MT2B0WJN6E"
+}
+
+#firebase = pyrebase.initialize_app(config)
 
 # Create your models here.
 class BusinessUser(models.Model):
@@ -36,6 +69,7 @@ class Drink(models.Model):
     imagePath = models.TextField()
     shotPrice = models.TextField()
     currency = models.TextField()
+    # add location id?
     
 class Mixer(models.Model):
     id = models.TextField(primary_key=True)
