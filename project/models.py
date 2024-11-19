@@ -13,12 +13,6 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-def test_data():
-    result = db.collection('locations_v2').document("LlnX4nPSdFPlnyckEJiR").get().to_dict()
-    print(result)
-    return result
-
-
 load_dotenv()
 
 API_KEY=os.getenv("API_KEY")
@@ -114,3 +108,20 @@ class Music(models.Model):
     genres = ArrayField(models.TextField())
     locationId = models.ForeignKey("Location", on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
+    
+    
+    
+def test_data():
+    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    result = db.collection('locations_v2').document("LlnX4nPSdFPlnyckEJiR").get().to_dict()
+    print(result)
+    return result
+
+
+def load_data():
+    Drink.objects.all().delete()
+    Mixer.objects.all().delete()
+    Location.objects.all().delete()
+    
+    data = test_data()
+   
