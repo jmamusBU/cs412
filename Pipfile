@@ -10,6 +10,7 @@ whitenoise = "*"
 pillow = "*"
 plotly = "*"
 psycopg2-binary = "*"
+google-cloud-firestore = "*"
 
 [dev-packages]
 

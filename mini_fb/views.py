@@ -43,6 +43,8 @@ class CreateProfileView(CreateView):
         print(f'CreateProfileView.form_valid(): form.cleaned_data={form.cleaned_data}')
         
         user = self.request.user
+        print(f"Logged in user: request.user={self.request.user}")
+        print(f"Logged in user: request.user.is_authenticated={self.request.user.is_authenticated}")
         
         form.instance.user = user
         return super().form_valid(form)

@@ -21,6 +21,7 @@ urlpatterns = [
     path(r'profile/add_friend/<int:other_pk>', CreateFriendView.as_view(), name="add_friend"),
     path(r'profile/friend_suggestions', ShowFriendSuggestionsView.as_view(), name="friend_suggestions"),
     path(r'profile/news_feed', ShowNewsFeedView.as_view(), name="news_feed"),
-    path('login/', auth_views.LoginView.as_view(template_name='mini_fb/login.html'), name='login'),
+    path(r'login/', auth_views.LoginView.as_view(template_name='mini_fb/login.html'), name='login'),
     path(r'logout/', auth_views.LogoutView.as_view(template_name='mini_fb/logged_out.html'), name='logout'),
 ]
+
