@@ -1,3 +1,8 @@
+# File: project/models.py
+# Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 13/11/2024
+# Description: Defines the models for the the project app. Some of the models may seem 
+# unnecessarily complicated, but the original DB is non-relational, making this all the more difficult.
+
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 #import pyrebase
@@ -7,6 +12,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import os
 from google.cloud.firestore import FieldFilter
+import json
 
 cred = credentials.Certificate("cheers-460f2-fd5e3013b68e.json")
 # TODO: ENABLE CRUD FOR DJANGO OBJECTS
@@ -34,31 +40,58 @@ config = {
 
 # Create your models here.
 class BusinessUser(models.Model):
+    '''Store Business User information.'''
     id = models.TextField(primary_key=True)
     locationId = models.ForeignKey("Location", on_delete=models.CASCADE)
+    #may need to change in future to allow for multiple sale points, now only one per user
     salePointId = models.ForeignKey("SalePoint", on_delete=models.CASCADE)
     
+    def __str__(self):
+        '''Return a string representation of this BusinessUser Object.'''
+        return f"id: {self.id}, location: {self.locationId}, salePoint: {self.salePointId}"
+    
 class CheersUser(models.Model):
+    '''Store information of Cheers! users collection docs.'''
     id = models.TextField(primary_key=True)
-    displayName = models.TextField()
+    displayName = models.TextField(null=True, blank=True)
     phoneNumber = models.TextField(null=True, blank=True)
     
+    def __str__(self):
+        '''Return a string representation of this CheersUser Object.'''
+        return f"{self.displayName}, id: {self.id}, phoneNumber: {self.phoneNumber}"
+    
 class SalePoint(models.Model):
+    '''Store Sale Point information.'''
     id = models.TextField(primary_key=True)
     locationId = models.ForeignKey("Location", on_delete=models.CASCADE)
     name = models.TextField()
     
+    def __str__(self):
+        '''Return a string representation of this SalePoint Object.'''
+        return f"{self.name}, id: {self.id}, location: {self.locationId}"
+    
 class DrinkOrderCount(models.Model):
+    '''Store Drink Order Count information, used to make up DrinkOrderCounts as part of an Order.'''
     count = models.IntegerField()
     drinkOrder = models.ForeignKey("DrinkOrder", on_delete=models.CASCADE)
     
+    def __str__(self):
+        '''Return a string representation of this DrinkOrderCount Object.'''
+        return f"count: {self.count}, drinkOrder: {self.drinkOrder}"
+    
 class DrinkOrder(models.Model):
+    '''Store Drink Order information, used to set drink details for a DrinkOrderCount.'''
     bottle = models.BooleanField()
-    drinkId = models.ForeignKey("Drink", on_delete=models.CASCADE)
-    mixerId = models.ForeignKey("Mixer", on_delete=models.CASCADE)
+    drinkId = models.ForeignKey("Drink", on_delete=models.CASCADE, null=True, blank=True) #can be null and not required
+    mixerId = models.ForeignKey("Mixer", on_delete=models.CASCADE, null=True, blank=True) #can be null and not required
     shot = models.BooleanField()
     
+    def __str__(self):
+        '''Return a string representation of this DrinkOrder Object.'''
+        return f"bottle: {self.bottle}, drink: {self.drinkId}, mixer: {self.mixerId}, shot: {self.shot}"
+    
 class Drink(models.Model):
+    '''Store Drink information.'''
     id = models.TextField(primary_key=True)
     name = models.TextField()
     available = models.BooleanField()
@@ -67,12 +100,14 @@ class Drink(models.Model):
     imagePath = models.TextField()
     shotPrice = models.TextField()
     currency = models.TextField()
-    # add location id?
+    # add location id maybe?
     
     def __str__(self):
+        '''Return a string representation of this Drink Object.'''
         return f"{self.name}, category: {self.category}, id: {self.id}"
     
 class Mixer(models.Model):
+    '''Store Mixer information.'''
     id = models.TextField(primary_key=True)
     name = models.TextField()
     available = models.BooleanField()
@@ -80,9 +115,11 @@ class Mixer(models.Model):
     addOnPrice = models.TextField()
     
     def __str__(self):
+        '''Return a string representation of this Mixer Object.'''
         return f"{self.name}, id: {self.id}"
     
 class Location(models.Model):
+    '''Store Location information.'''
     #MUST BE STANDALONE, NO FOREIGN KEYS, TO MEET PROJECT REQUIREMENTS
     id = models.TextField(primary_key=True)
     name = models.TextField()
@@ -93,19 +130,21 @@ class Location(models.Model):
     maxConsumptionCents = models.TextField()
     
     def __str__(self):
+        '''Return a string representation of this Location Object.'''
         return f"{self.name}, id: {self.id}"
     
 class Order(models.Model):
+    '''Store Order information.'''
     id = models.TextField(primary_key=True)
     amountPaidCents = models.IntegerField()
     consumerId = models.TextField()
     consumerName = models.TextField()
-    drinkOrders = models.ManyToManyField("DrinkOrder")
+    drinkOrderCounts = models.ManyToManyField("DrinkOrderCount")
     fastTrack = models.BooleanField()
     fcmToken = models.TextField(null=True, blank=True)
     locationId = models.ForeignKey("Location", on_delete=models.CASCADE)
     orderNumber = models.TextField()
-    phoneNumber = models.TextField()
+    phoneNumber = models.TextField(blank=True, null=True) #can be null
     salePointId = models.ForeignKey("SalePoint", on_delete=models.CASCADE)
     status = models.TextField()
     table = models.TextField(null=True, blank=True)
@@ -115,36 +154,85 @@ class Order(models.Model):
     verificationCode = models.TextField()
     consumptionOrder = models.BooleanField(blank=True, null=True) #can be null
     
+    def __str__(self):
+        '''Return a string representation of this Order Object.'''
+        return f"consumer: {self.consumerName}, id: {self.id}, status: {self.status}, verificationCode: {self.verificationCode}"
+    
 class Music(models.Model):
+    '''Store Music information.'''
     id = models.TextField(primary_key=True)
     title = models.TextField()
     albumArtURL = models.TextField()
     artistName = models.TextField()
-    genres = models.TextField() #string of genres separated by , use .split(',') and .strip() to get list
+    genres = models.TextField() #saved as json string using json.dumps(array), can be converted back to array using json.loads(string) 
     locationId = models.TextField()
     timestamp = models.DateTimeField()
     
     def __str__(self):
+        '''Return a string representation of this Music Object.'''
         return f"{self.title}, artist: {self.artistName}, id: {self.id}"
     
     
 def locationData():
+    '''Get location data for a specific location from Firestore collection locations_v2.'''
     # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
     result = db.collection('locations_v2').document("LlnX4nPSdFPlnyckEJiR").get().to_dict()
-    print(result)
+    #print(result)
     return result
 
 def musicData():
+    '''Get music data for a specific location from Firestore collection music.'''
      # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
     result = db.collection('music').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
     #convert to dict
     result = {doc.id: doc.to_dict() for doc in result}
-    print(result)
+    #print(result)
     return result
 
+def ordersData():
+    '''Get orders data for a specific location from Firestore collection orders_v2.'''
+    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    result = db.collection('orders_v2').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
+    #convert to dict
+    result = {doc.id: doc.to_dict() for doc in result}
+    #print(result)
+    return result
+
+def salePointsData():
+    '''Get sale points data for a specific location from Firestore collection salePoints.'''
+    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    result = db.collection('salePoints').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
+    #convert to dict
+    result = {doc.id: doc.to_dict() for doc in result}
+    #print(result)
+    return result
+
+def businessUsersData():
+    '''Get business users data for a specific location from Firestore collection businessUsers.'''
+    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    result = db.collection('businessUsers').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
+    #convert to dict
+    result = {doc.id: doc.to_dict() for doc in result}
+    #print(result)
+    return result
+
+def cheersUsersData():
+    '''Get cheers users data from Firestore collection users.'''
+    result = db.collection('users').get()
+    #convert to dict
+    result = {doc.id: doc.to_dict() for doc in result}
+    #print(result)
+    return result
+
+
+
+
 def load_data():
+    '''Load data from Firestore into Django models. 
+    While it may seem unnecessarily large/complicated, 
+    we are essentially transforming a non-relational DB into a relational one.'''
     
-    # make exception for duplicates, name or id, possible problem with orders
+    # possibly make exception for duplicates, name or id, possible problem with orders
     
     location_data = locationData()
     
@@ -191,6 +279,7 @@ def load_data():
         addOnPrice = m.get('addOnPrice')
         
         #create mixer if id doesn't exist, and set defaults
+        # look into update_or_create
         mixer, created = Mixer.objects.get_or_create(
             id=mixer_id,
             defaults={
@@ -246,18 +335,18 @@ def load_data():
     for k, m in music_data.items():
         music_id = k
         title = m.get('title')
-        print(f'title: {title}')
+        #print(f'title: {title}')
         albumArtURL = m.get('albumArtURL')
-        print(f'albumArtURL: {albumArtURL}')
+        #print(f'albumArtURL: {albumArtURL}')
         artistName = m.get('artistName')
-        print(f'artistName: {artistName}')
-        genres = ', '.join(m.get('genres'))
-        print(f'genres: {genres}')
+        #print(f'artistName: {artistName}')
+        genres = json.dumps(m.get('genres'))
+        #print(f'genres: {genres}')
         timestamp = m.get('timestamp')
-        print(f'timestamp: {timestamp}')
+        #print(f'timestamp: {timestamp}')
         locationId = m.get('locationId')
-        print(f'locationId: {locationId}')
-        print('----------------')
+        #print(f'locationId: {locationId}')
+        #print('----------------')
         
         #create music if id doesn't exist, and set defaults
         music, created = Music.objects.get_or_create(
@@ -281,5 +370,180 @@ def load_data():
             music.timestamp = timestamp
             music.locationId = locationId
             music.save()
+            
+            
+    sale_points_data = salePointsData()
+    
+    for k, s in sale_points_data.items():
+        sale_point_id = k
+        name = s.get('name')
+        locationId = s.get('locationId')
         
-   
+        #create sale point if id doesn't exist, and set defaults
+        sale_point, created = SalePoint.objects.get_or_create(
+            id=sale_point_id,
+            defaults={
+                'name': name,
+                'locationId': Location.objects.get(id=locationId)
+            }
+        )
+        
+        #if we didn't create the sale point, we can update the fields
+        if not created:
+            sale_point.name = name
+            sale_point.locationId = Location.objects.get(id=locationId)
+            sale_point.save()
+    
+    
+    orders_data = ordersData()
+    # Delete all Orders, DrinkOrderCount, and DrinkOrder before loading new ones to avoid duplicates
+    Order.objects.all().delete()
+    DrinkOrderCount.objects.all().delete()
+    DrinkOrder.objects.all().delete()
+    
+    for k, o in orders_data.items():
+        order_id = k
+        amountPaidCents = o.get('amountPaidCents')
+        consumerId = o.get('consumerId')
+        consumerName = o.get('consumerName')
+        fastTrack = o.get('fastTrack')
+        fcmToken = o.get('fcmToken')
+        orderNumber = o.get('orderNumber')
+        phoneNumber = o.get('phoneNumber')
+        status = o.get('status')
+        table = o.get('table')
+        time = o.get('time')
+        tip = o.get('tip')
+        tipCurrency = o.get('tipCurrency')
+        verificationCode = o.get('verificationCode')
+        consumptionOrder = o.get('consumptionOrder')
+        
+        # Foreign keys
+        locationId = Location.objects.get(id=o.get('locationId'))
+        salePointId = SalePoint.objects.get(id=o.get('salePointId'))
+        
+        #many to many field for drinkOrderCounts
+        drinkOrderCounts = o.get('drinkOrderCounts')
+        #print(f'drinkOrderCounts: {drinkOrderCounts}')
+        drinkOrderCountsList = []
+        for d in drinkOrderCounts:
+            #print(f'd: {d}')
+            count = d.get('count')
+            #print(f'count: {count}')
+            drinkOrder = d.get('drinkOrder')
+            #print(f'drinkOrder: {drinkOrder}')
+            drinkOrderMixerId = drinkOrder.get('mixerId')
+            #print(f'drinkOrderMixerId: {drinkOrderMixerId}')
+            drinkOrderDrinkId = drinkOrder.get('drinkId')
+            #print(f'drinkOrderDrinkId: {drinkOrderDrinkId}')
+            drinkOrderBottle = drinkOrder.get('bottle')
+            #print(f'drinkOrderBottle: {drinkOrderBottle}')
+            drinkOrderShot = drinkOrder.get('shot')
+            #print(f'drinkOrderShot: {drinkOrderShot}')
+            
+            if drinkOrderDrinkId != "":
+                drink = Drink.objects.get(id=drinkOrderDrinkId)
+            else:
+                drink = None
+                
+            if drinkOrderMixerId != "":
+                mixer = Mixer.objects.get(id=drinkOrderMixerId)
+            else:
+                mixer = None
+                
+            drinkOrderFinal = DrinkOrder(
+                bottle = drinkOrderBottle,
+                drinkId = drink,
+                mixerId = mixer,
+                shot = drinkOrderShot
+            )
+            drinkOrderFinal.save()
+            
+            drinkOrderCountFinal = DrinkOrderCount(
+                count = count,
+                drinkOrder = DrinkOrder.objects.get(id=drinkOrderFinal.id)
+            )
+            drinkOrderCountFinal.save()
+            
+            drinkOrderCountsList.append(drinkOrderCountFinal)
+            
+        order = Order(
+            id = order_id,
+            amountPaidCents = amountPaidCents,
+            consumerId = consumerId,
+            consumerName = consumerName,
+            fastTrack = fastTrack,
+            fcmToken = fcmToken,
+            locationId = locationId,
+            orderNumber = orderNumber,
+            phoneNumber = phoneNumber,
+            salePointId = salePointId,
+            status = status,
+            table = table,
+            time = time,
+            tip = tip,
+            tipCurrency = tipCurrency,
+            verificationCode = verificationCode,
+            consumptionOrder = consumptionOrder
+        )
+        order.save()
+            
+        for d in drinkOrderCountsList:
+            #print(f'drinkOrderCount: {d}')
+            order.drinkOrderCounts.add(d)
+        order.save()
+        
+        
+        business_data = businessUsersData()
+        
+        for k, b in business_data.items():
+            business_id = k
+            locationId = b.get('locationId')
+            salePointId = b.get('salePointId')
+            
+            #create business user if id doesn't exist, and set defaults
+            business_user, created = BusinessUser.objects.get_or_create(
+                id=business_id,
+                defaults={
+                    'locationId': Location.objects.get(id=locationId),
+                    'salePointId': SalePoint.objects.get(id=salePointId)
+                }
+            )
+            
+            #if we didn't create the business user, we can update the fields
+            if not created:
+                business_user.locationId = Location.objects.get(id=locationId)
+                business_user.salePointId = SalePoint.objects.get(id=salePointId)
+                business_user.save()
+                
+        
+        users_data = cheersUsersData()
+        
+        for k, u in users_data.items():
+            user_id = k
+            
+            if 'displayName' in u:
+                displayName = u.get('displayName')
+            else:
+                displayName = None
+            
+            if 'phoneNumber' in u:
+                phoneNumber = u.get('phoneNumber')
+            else:
+                phoneNumber = None
+                 
+            
+            #create cheers user if id doesn't exist, and set defaults
+            cheers_user, created = CheersUser.objects.get_or_create(
+                id=user_id,
+                defaults={
+                    'displayName': displayName,
+                    'phoneNumber': phoneNumber
+                }
+            )
+            
+            #if we didn't create the cheers user, we can update the fields
+            if not created:
+                cheers_user.displayName = displayName
+                cheers_user.phoneNumber = phoneNumber
+                cheers_user.save()
