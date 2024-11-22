@@ -139,7 +139,9 @@ class Order(models.Model):
     amountPaidCents = models.IntegerField()
     consumerId = models.TextField()
     consumerName = models.TextField()
-    drinkOrderCounts = models.ManyToManyField("DrinkOrderCount")
+    drinkOrderCounts = models.ManyToManyField("DrinkOrderCount") #A django admin glitch shows tons 
+    #of duplicates/other objects, 
+    #checked with ORM and all good though, this drove me absolutely crazy
     fastTrack = models.BooleanField()
     fcmToken = models.TextField(null=True, blank=True)
     locationId = models.ForeignKey("Location", on_delete=models.CASCADE)
@@ -459,9 +461,10 @@ def load_data():
             )
             drinkOrderFinal.save()
             
+            
             drinkOrderCountFinal = DrinkOrderCount(
                 count = count,
-                drinkOrder = DrinkOrder.objects.get(id=drinkOrderFinal.id)
+                drinkOrder = DrinkOrder.objects.get(pk=drinkOrderFinal.pk)
             )
             drinkOrderCountFinal.save()
             
@@ -488,9 +491,13 @@ def load_data():
         )
         order.save()
             
+        
+        #print(f'drinkOrderCountsList: {drinkOrderCountsList}')
+        order.drinkOrderCounts.clear()
         for d in drinkOrderCountsList:
             #print(f'drinkOrderCount: {d}')
-            order.drinkOrderCounts.add(d)
+            #print(f'd.pk: {d.pk}')
+            order.drinkOrderCounts.add(DrinkOrderCount.objects.get(pk=d.pk))
         order.save()
         
         
@@ -547,3 +554,16 @@ def load_data():
                 cheers_user.displayName = displayName
                 cheers_user.phoneNumber = phoneNumber
                 cheers_user.save()
+                
+def deleteAll():
+    '''Delete all data from all models.'''
+    BusinessUser.objects.all().delete()
+    CheersUser.objects.all().delete()
+    SalePoint.objects.all().delete()
+    DrinkOrderCount.objects.all().delete()
+    DrinkOrder.objects.all().delete()
+    Drink.objects.all().delete()
+    Mixer.objects.all().delete()
+    Location.objects.all().delete()
+    Order.objects.all().delete()
+    Music.objects.all().delete()
