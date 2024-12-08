@@ -47,7 +47,7 @@ class BusinessUser(models.Model):
     #may need to change in future to allow for multiple sale points, now only one per user
     salePointId = models.ForeignKey("SalePoint", on_delete=models.CASCADE)
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     
     def getLocationId(self):
         '''Return the location id of this BusinessUser.'''
