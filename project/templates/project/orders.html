@@ -1,0 +1,71 @@
+<!--
+File: project/orders.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 7/12/2024
+Description: Template to show all order data with filtering options
+-->
+
+{% extends "project/base.html" %}
+{% block content %}
+<div>
+    {% include 'project/order_search.html'%}
+    <!--
+    STATUS REPORT/NOTES:
+    another page similar to this but music
+
+    add CRUD: able to delete orders
+    Full CRUD for music
+
+    graphs page showing orders and music, with filtering options
+
+    possibly could do combined and separate graph page_obj.has_next
+    
+    still need to add user accounts, linked to Business accounts, from which we will 
+    pull the location id
+    
+    -->
+</div> 
+<h2>All Orders</h2>
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">Consumer Name</th>
+            <th class="table_text">Verification Code</th>
+            <th class="table_text">Time</th>
+            <th class="table_text">Status</th>
+            <th class="table_text">Consumption</th>
+            <th class="table_text">Price (Cents)</th>
+        </tr>
+        {% for o in orders %} 
+            <tr>
+                <td class="table_text">{{ o.consumerName }}</td>
+                <td class="table_text">{{ o.verificationCode }}</td>
+                <td class="table_text">{{ o.time }}</td>
+                <td class="table_text">{{ o.status }}</td>
+                <td class="table_text">{{ o.consumptionOrder }}</td>
+                <td class="table_text">{{ o.amountPaidCents}}</td>
+                <td class="table_text"><a href="{% url 'orderDetail' o.id %}">Detail</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+             
+                </li>
+            {% endif %}
+                <li class="">
+                    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+                </li>
+            {% if page_obj.has_next %}
+                <li>
+                    <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+                </li>
+            {% endif %}
+            </ul>
+{% endif %}
+
+{% endblock %}

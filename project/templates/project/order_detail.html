@@ -1,0 +1,73 @@
+<!--
+File: project/order_detail.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: Template to show all of the data for a single order
+-->
+
+{% extends "project/base.html" %}
+{% block content %}
+<h1>Order Details</h1>
+
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">Consumer Name</th>
+            <td class="table_text">{{ o.consumerName }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Verification Code</th>
+            <td class="table_text">{{ o.verificationCode }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Time</th>
+            <td class="table_text">{{ o.time }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Status</th>
+            <td class="table_text">{{ o.status }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Consumption</th>
+            <td class="table_text">{{ o.consumptionOrder }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Fast Track</th>
+            <td class="table_text">{{ o.fastTrack }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Phone Number</th>
+            <td class="table_text">{{ o.phoneNumber }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Drinks</th>
+            <td class="table_text">
+                <ul>
+                    {% for d in o.drinkOrderCounts.all %}
+                        <li>
+                            {% if d.drinkOrder.drinkId %}
+                                <p>{{ d.drinkOrder.drinkId.name }}</p>
+                            {% endif %}
+                            {% if d.drinkOrder.mixerId %}
+                                {{ d.drinkOrder.mixerId.name }}
+                            {% endif %}
+                            x{{ d.count }}
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th class="table_text">Price (Cents)</th>
+            <td class="table_text">{{ o.amountPaidCents }}</td>
+        </tr>
+        
+    </tbody>
+</table>
+<a href="{% url 'delete_order' o.id %}">Delete Order</a>
+<br>
+
+
+
+
+{% endblock %}

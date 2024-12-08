@@ -1,0 +1,41 @@
+{% load static %}
+<!--
+File: project/base.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 05/12/2024
+Description: base template for project app, providing a header, nav, and footer
+-->
+
+<html>
+    <head>
+        <link rel="stylesheet" href={% static "project/styles.css"%}/>
+        <title>Cheers! Analytics</title>
+    </head>
+    <body>
+        <header>
+            <h1><strong>Jose's Cheers! Analytics</strong></h1>
+        </header>
+        <nav>
+            <a href="{% url 'orders' %}">Orders</a> 
+            <a href="{% url 'music' %}">Music</a>
+        </nav>
+
+        {% if request.user.is_authenticated %}
+        
+        <p>Logged in as: {{request.user}}</p>
+
+        <form action="{% url 'logout' %}" method="post" class="logout">
+            {% csrf_token %}
+            <button type="submit" class="logout">Logout</button>
+        </form>
+        {% else %}
+        <p>Not Logged in</p>
+        <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+        <footer>
+            <p> All Rights Reserved by Cheers Technologies SL <a href="https://cheersapp.es/terms-conditions.html" target="_blank">Credits</a> &copy;</p>
+        </footer>
+    </body>
+</html>

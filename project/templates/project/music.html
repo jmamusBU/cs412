@@ -1,0 +1,55 @@
+<!--
+File: project/music.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: Template to show all music data with filtering options
+-->
+
+{% extends "project/base.html" %}
+{% block content %}
+
+<div>
+    {% include 'project/music_search.html'%}
+</div>
+
+<h2>All Music</h2>
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">Title</th>
+            <th class="table_text">Album</th>
+            <th class="table_text">Artist</th>
+            <th class="table_text">Time</th>
+
+        </tr>
+        {% for m in music %} 
+            <tr>
+                <td class="table_text">{{ m.title }}</td>
+                <td class="table_text"><img src="{{ m.albumArtURL }}" width="100"></td>
+                <td class="table_text">{{ m.artistName}}</td>
+                <td class="table_text">{{ m.timestamp }}</td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+             
+                </li>
+            {% endif %}
+                <li class="">
+                    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+                </li>
+            {% if page_obj.has_next %}
+                <li>
+                    <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+                </li>
+            {% endif %}
+            </ul>
+{% endif %}
+
+{% endblock %}

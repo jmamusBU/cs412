@@ -1,0 +1,79 @@
+{% extends 'project/base.html' %}
+
+<!--
+File: project/delete_order_form.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: displays a form to delete an order in the database
+-->
+
+{% block content %}
+<h3>Delete Order?</h3> 
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">Consumer Name</th>
+            <td class="table_text">{{ o.consumerName }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Verification Code</th>
+            <td class="table_text">{{ o.verificationCode }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Time</th>
+            <td class="table_text">{{ o.time }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Status</th>
+            <td class="table_text">{{ o.status }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Consumption</th>
+            <td class="table_text">{{ o.consumptionOrder }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Fast Track</th>
+            <td class="table_text">{{ o.fastTrack }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Phone Number</th>
+            <td class="table_text">{{ o.phoneNumber }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Drinks</th>
+            <td class="table_text">
+                <ul>
+                    {% for d in o.drinkOrderCounts.all %}
+                        <li>
+                            {% if d.drinkOrder.drinkId %}
+                                <p>{{ d.drinkOrder.drinkId.name }}</p>
+                            {% endif %}
+                            {% if d.drinkOrder.mixerId %}
+                                {{ d.drinkOrder.mixerId.name }}
+                            {% endif %}
+                            x{{ d.count }}
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th class="table_text">Price (Cents)</th>
+            <td class="table_text">{{ o.amountPaidCents }}</td>
+        </tr>
+        
+    </tbody>
+</table>
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ form.as_table }}
+    <br>
+    <button type="submit">Delete</button>
+</form>
+<br>
+<form action="{% url 'orderDetail' o.id %}">
+    <button type="submit">Cancel</button>
+</form>
+<br>
+{% endblock %}

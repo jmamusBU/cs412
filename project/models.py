@@ -13,6 +13,7 @@ from firebase_admin import firestore
 import os
 from google.cloud.firestore import FieldFilter
 import json
+from django.contrib.auth.models import User
 
 cred = credentials.Certificate("cheers-460f2-fd5e3013b68e.json")
 # TODO: ENABLE CRUD FOR DJANGO OBJECTS
@@ -45,6 +46,12 @@ class BusinessUser(models.Model):
     locationId = models.ForeignKey("Location", on_delete=models.CASCADE)
     #may need to change in future to allow for multiple sale points, now only one per user
     salePointId = models.ForeignKey("SalePoint", on_delete=models.CASCADE)
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def getLocationId(self):
+        '''Return the location id of this BusinessUser.'''
+        return self.locationId
     
     def __str__(self):
         '''Return a string representation of this BusinessUser Object.'''

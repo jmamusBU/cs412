@@ -1,0 +1,57 @@
+<!--
+File: project/order_search.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: Provides search filters for the orders page
+-->
+
+<h3>Search Filters</h3>
+
+<form action="{% url 'orders' %}">
+<table>
+    <tr>
+        <th>Status</th>
+        <td>
+            <select name="status">
+                <option value="Any">Any</option>
+                <option value="IN_QUEUE">In Queue</option>
+                <option value="PICKUP">Pickup</option>
+                <option value="DONE">Done</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Consumer Name</th>
+        <td>
+            <input type="text" name="consumer_name">
+        </td>
+    <tr>
+    <tr>
+        <th>Verification Code</th>
+        <td>
+            <input type="text" name="verification_code">
+        </td>
+    <tr>
+        <th>Consumption</th>
+        <td>
+            <select name="consumption">
+                <option value="Any">Any</option>
+                <option value="False">False</option>
+                <option value="True">True</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Minimum Date</th>
+        <td>
+            <input type="date" name="min_date">
+        </td>
+    </tr>
+    <tr>
+        <th>Maximum Date</th>
+        <td>
+            <input type="date" name="max_date">
+        </td>
+    </tr>
+</table>
+<button type="submit">Search</button>
+</form>
