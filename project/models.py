@@ -6,7 +6,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 #import pyrebase
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -16,8 +16,13 @@ import json
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-cred = credentials.Certificate("cheers-460f2-fd5e3013b68e.json")
-# TODO: ENABLE CRUD FOR DJANGO OBJECTS
+load_dotenv()
+#cred = credentials.Certificate("cheers-460f2-fd5e3013b68e.json")
+
+jsonCreds = os.environ.get("GOOGLE_CREDS", "{}")
+dictCreds = json.loads(jsonCreds)
+cred = credentials.Certificate(dictCreds)
+
 # only load data once so that 
 # deletions/modifications can persist through refreshes/restarts
 
@@ -25,18 +30,7 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-#load_dotenv()
 
-API_KEY=os.getenv("API_KEY")
-
-config = {
-  "apiKey": API_KEY,
-  "authDomain": "cheers-460f2.firebaseapp.com",
-  "projectId": "cheers-460f2",
-  "storageBucket": "cheers-460f2.appspot.com",
-  "appId": "1:765440259273:web:0925849297ff916903c918",
-  "measurementId": "G-MT2B0WJN6E"
-}
 
 #firebase = pyrebase.initialize_app(config)
 
