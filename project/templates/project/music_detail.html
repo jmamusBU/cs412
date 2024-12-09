@@ -37,10 +37,10 @@ Description: Template to show all of the data for a single song
         </tr>    
     </tbody>
 </table>
-<a href="{% url 'update_music' m.id %}">
+<a class="anti-link" href="{% url 'update_music' m.id %}">
     <button>Update</button>
 </a>
-<a href="{% url 'delete_music' m.id %}">
+<a class="anti-link" href="{% url 'delete_music' m.id %}">
     <button>Delete</button>
 </a>
 
