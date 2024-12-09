@@ -1,0 +1,32 @@
+<!--
+File: project/graph.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: Template to show graphs for all order and music data with filtering options
+-->
+
+
+{% extends 'project/base.html' %}
+{% block content %}
+<div>
+{% include 'project/graph_search.html'%}
+</div>
+
+<div>
+    <h3>Orders By Status</h3>
+    {{pie_div|safe}}
+</div>
+
+<div>
+    <h3>Orders per day</h3>
+    {{bar_div|safe}}
+</div>
+<div>
+    <h3>Orders by Price (Cents)</h3>
+    {{orders_scatter_div|safe}}
+</div>
+<div>
+    <h3>Music by Time</h3>
+    {{music_scatter_div|safe}}
+</div>
+
+{% endblock %}

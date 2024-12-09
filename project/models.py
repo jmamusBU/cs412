@@ -14,6 +14,7 @@ import os
 from google.cloud.firestore import FieldFilter
 import json
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 cred = credentials.Certificate("cheers-460f2-fd5e3013b68e.json")
 # TODO: ENABLE CRUD FOR DJANGO OBJECTS
@@ -169,7 +170,7 @@ class Order(models.Model):
     
 class Music(models.Model):
     '''Store Music information.'''
-    id = models.TextField(primary_key=True)
+    id = models.TextField(primary_key=True, editable=False)
     title = models.TextField()
     albumArtURL = models.TextField()
     artistName = models.TextField()
@@ -180,6 +181,10 @@ class Music(models.Model):
     def __str__(self):
         '''Return a string representation of this Music Object.'''
         return f"{self.title}, artist: {self.artistName}, id: {self.id}"
+    
+    def get_absolute_url(self):
+        return reverse("musicDetail", kwargs={"pk": self.pk})
+    
     
     
 def locationData():

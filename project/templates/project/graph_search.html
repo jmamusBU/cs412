@@ -1,0 +1,25 @@
+<!--
+File: project/graph_search.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: Provides search filters for the graphs page
+-->
+<h3>Search Filters</h3>
+
+<form action="{% url 'graphs' %}">
+
+<table>
+    <tr>
+        <th>Minimum Date</th>
+        <td>
+            <input type="date" name="min_date">
+        </td>
+    </tr>
+    <tr>
+        <th>Maximum Date</th>
+        <td>
+            <input type="date" name="max_date">
+        </td>
+    </tr>
+</table>
+<button type="submit">Search</button>
+</form>

@@ -21,4 +21,9 @@ urlpatterns = [
     path(r'logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name='logout'),
     path(r'order_detail/<str:pk>', views.OrderDetailView.as_view(), name='orderDetail'),
     path(r'order_detail/<str:pk>/delete', DeleteOrderView.as_view(), name="delete_order"),
+    path(r'music_detail/<str:pk>', views.MusicDetailView.as_view(), name='musicDetail'),
+    path(r'music_detail/<str:pk>/delete', DeleteMusicView.as_view(), name="delete_music"),
+    path(r'music_detail/<str:pk>/update', UpdateMusicView.as_view(), name="update_music"),
+    path(r'create_music/', CreateMusicView.as_view(), name='create_music'),
+    path(r'graphs/', GraphView.as_view(), name='graphs'),
 ]

@@ -1,0 +1,24 @@
+{% extends 'project/base.html' %}
+
+<!--
+File: project/create_music_form.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: displays a form to create a new music object in the database
+-->
+
+{% block content %}
+<h3>Create a New Song</h3> 
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ form.as_table }}
+    <p>Format:["Pop", "Rock"]</p>
+    <br>
+    <button type="submit">Create</button>
+</form>
+<br>
+<form action="{% url 'music' %}">
+    <button type="submit">Cancel</button>
+</form>
+<br>
+{% endblock %}

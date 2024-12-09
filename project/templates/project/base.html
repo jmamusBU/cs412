@@ -17,6 +17,7 @@ Description: base template for project app, providing a header, nav, and footer
         <nav>
             <a href="{% url 'orders' %}">Orders</a> 
             <a href="{% url 'music' %}">Music</a>
+            <a href="{% url 'graphs' %}">Graphs</a>
         </nav>
 
         {% if request.user.is_authenticated %}

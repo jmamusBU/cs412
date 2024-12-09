@@ -10,7 +10,9 @@ Description: Template to show all music data with filtering options
 <div>
     {% include 'project/music_search.html'%}
 </div>
-
+<a href="{% url 'create_music' %}">
+    <button>Create New Song</button>
+</a>
 <h2>All Music</h2>
 <table>
     <tbody>
@@ -18,8 +20,8 @@ Description: Template to show all music data with filtering options
             <th class="table_text">Title</th>
             <th class="table_text">Album</th>
             <th class="table_text">Artist</th>
-            <th class="table_text">Time</th>
-
+            <th class="table_text">Time (GMT)</th>
+            <th class="table_text">Detail</th>
         </tr>
         {% for m in music %} 
             <tr>
@@ -27,7 +29,7 @@ Description: Template to show all music data with filtering options
                 <td class="table_text"><img src="{{ m.albumArtURL }}" width="100"></td>
                 <td class="table_text">{{ m.artistName}}</td>
                 <td class="table_text">{{ m.timestamp }}</td>
-
+                <td class="table_text"><a href="{% url 'musicDetail' m.id %}">Detail</a></td>
             </tr>
         {% endfor %}
     </tbody>

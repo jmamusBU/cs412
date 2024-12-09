@@ -1,0 +1,52 @@
+{% extends 'project/base.html' %}
+
+<!--
+File: project/update_music_form.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: displays a form to update a music object in the database
+-->
+
+{% block content %}
+<h3>Update Song?</h3> 
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">Title</th>
+            <td class="table_text">{{ m.title }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Album</th>
+            <td class="table_text"><img src="{{ m.albumArtURL }}" width="400"></td>
+        </tr>
+        <tr>
+            <th class="table_text">Artist</th>
+            <td class="table_text">{{ m.artistName }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Genres</th>
+            <td class="table_text">
+                <ul>
+                    {% for g in genres %}
+                        <li>{{ g }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        <tr>
+            <th class="table_text">Timestamp</th>
+            <td class="table_text">{{ m.timestamp }}</td>
+        </tr>    
+    </tbody>
+</table>
+<form method="POST">
+    {% csrf_token %}
+    
+    {{ form.as_table }}
+    <br>
+    <button type="submit">Update</button>
+</form>
+<br>
+<form action="{% url 'musicDetail' m.id %}">
+    <button type="submit">Cancel</button>
+</form>
+<br>
+{% endblock %}

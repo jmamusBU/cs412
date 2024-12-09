@@ -1,0 +1,52 @@
+<!--
+File: project/music_detail.html
+Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 8/12/2024
+Description: Template to show all of the data for a single song
+-->
+
+{% extends "project/base.html" %}
+{% block content %}
+<h2>Song Details</h2>
+
+<table>
+    <tbody>
+        <tr>
+            <th class="table_text">Title</th>
+            <td class="table_text">{{ m.title }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Album</th>
+            <td class="table_text"><img src="{{ m.albumArtURL }}" width="400"></td>
+        </tr>
+        <tr>
+            <th class="table_text">Artist</th>
+            <td class="table_text">{{ m.artistName }}</td>
+        </tr>
+        <tr>
+            <th class="table_text">Genres</th>
+            <td class="table_text">
+                <ul>
+                    {% for g in genres %}
+                        <li>{{ g }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        <tr>
+            <th class="table_text">Timestamp</th>
+            <td class="table_text">{{ m.timestamp }}</td>
+        </tr>    
+    </tbody>
+</table>
+<a href="{% url 'update_music' m.id %}">
+    <button>Update</button>
+</a>
+<a href="{% url 'delete_music' m.id %}">
+    <button>Delete</button>
+</a>
+
+<br>
+
+
+
+
+{% endblock %}
