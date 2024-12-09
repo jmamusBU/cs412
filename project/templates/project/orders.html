@@ -44,7 +44,7 @@ Description: Template to show all order data with filtering options
                 <td class="table_text">{{ o.status }}</td>
                 <td class="table_text">{{ o.consumptionOrder }}</td>
                 <td class="table_text">{{ o.amountPaidCents}}</td>
-                <td class="table_text"><a href="{% url 'orderDetail' o.id %}">Detail</a></td>
+                <td class="table_text"><a class="reg-button" href="{% url 'orderDetail' o.id %}">Detail</a></td>
             </tr>
         {% endfor %}
     </tbody>

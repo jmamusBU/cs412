@@ -12,25 +12,31 @@ Description: base template for project app, providing a header, nav, and footer
     </head>
     <body>
         <header>
-            <h1><strong>Jose's Cheers! Analytics</strong></h1>
+            <h1><em><strong>Jose's Cheers! Analytics</strong></em></h1>
         </header>
         <nav>
-            <a href="{% url 'orders' %}">Orders</a> 
-            <a href="{% url 'music' %}">Music</a>
-            <a href="{% url 'graphs' %}">Graphs</a>
+            <a class="anti-link" href="{% url 'orders' %}">
+                <button class="reg-button">Orders</button>
+                </a> 
+            <a class="anti-link" href="{% url 'music' %}">
+            <button class="reg-button">Music</button>
+            </a>
+            <a class="anti-link" href="{% url 'graphs' %}">
+            <button class="reg-button">Graphs</button>
+            </a>
         </nav>
 
         {% if request.user.is_authenticated %}
         
-        <p>Logged in as: {{request.user}}</p>
+        <p>User: {{request.user}}</p>
 
         <form action="{% url 'logout' %}" method="post" class="logout">
             {% csrf_token %}
-            <button type="submit" class="logout">Logout</button>
+            <button type="submit" class="reg-button">Logout</button>
         </form>
         {% else %}
-        <p>Not Logged in</p>
-        <a href="{% url 'login' %}">Login</a>
+        <p>Unauthenticated</p>
+        <a class="reg-button" href="{% url 'login' %}">Login</a>
         {% endif %}
 
         {% block content %}

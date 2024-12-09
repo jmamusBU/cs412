@@ -29,7 +29,7 @@ Description: Template to show all music data with filtering options
                 <td class="table_text"><img src="{{ m.albumArtURL }}" width="100"></td>
                 <td class="table_text">{{ m.artistName}}</td>
                 <td class="table_text">{{ m.timestamp }}</td>
-                <td class="table_text"><a href="{% url 'musicDetail' m.id %}">Detail</a></td>
+                <td class="table_text"><a class="reg-button" href="{% url 'musicDetail' m.id %}">Detail</a></td>
             </tr>
         {% endfor %}
     </tbody>
