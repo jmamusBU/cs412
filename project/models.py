@@ -6,7 +6,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 #import pyrebase
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -25,7 +25,7 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-load_dotenv()
+#load_dotenv()
 
 API_KEY=os.getenv("API_KEY")
 
