@@ -26,6 +26,9 @@ Description: Template to show all of the data for a single song
             <th class="table_text">Genres</th>
             <td class="table_text">
                 <ul>
+                    <!--genres has been changed back into an area within 
+                    get_context, so it can be interpreted nicely
+                    -->
                     {% for g in genres %}
                         <li>{{ g }}</li>
                     {% endfor %}

@@ -12,6 +12,7 @@ Description: displays a form to create a new music object in the database
     {% csrf_token %}
     
     {{ form.as_table }}
+    <!--Must be inputed in this format to ensure compatibility-->
     <p>Format:["Pop", "Rock"]</p>
     <br>
     <button type="submit">Create</button>

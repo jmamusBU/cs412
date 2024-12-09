@@ -33,6 +33,7 @@ class OrderListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         
         businessUser = BusinessUser.objects.get(user=self.request.user)
+        # get all orders for the business user's location
         qs = Order.objects.filter(locationId=businessUser.getLocationId())
         
         if 'consumer_name' in self.request.GET:
@@ -109,6 +110,7 @@ class MusicListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
 
         businessUser = BusinessUser.objects.get(user=self.request.user)
+        # get all music for the business user's location
         qs = Music.objects.filter(locationId=businessUser.getLocationId().id)
         
         if 'artist' in self.request.GET:
@@ -148,6 +150,7 @@ class MusicDetailView(LoginRequiredMixin, DetailView):
         '''Adds the genres to the context data'''
         context = super().get_context_data(**kwargs)
         genres = Music.objects.get(id=self.kwargs['pk']).genres
+        # convert the genres string to a list for interpretation
         context['genres'] = json.loads(genres)
         print(json.loads(genres)) 
         return context
@@ -169,6 +172,7 @@ class DeleteMusicView(LoginRequiredMixin, DeleteView):
         '''Adds the profile to the context data so that the form can be submitted'''
         context = super().get_context_data(**kwargs)
         genres = Music.objects.get(id=self.kwargs['pk']).genres
+        # convert the genres string to a list for interpretation
         context['genres'] = json.loads(genres)
         print(json.loads(genres)) 
         return context
@@ -187,6 +191,7 @@ class UpdateMusicView(LoginRequiredMixin, UpdateView):
         '''Adds the music to the context data so that the form can be submitted'''
         context = super().get_context_data(**kwargs)
         genres = Music.objects.get(id=self.kwargs['pk']).genres
+        # convert the genres string to a list for interpretation
         context['genres'] = json.loads(genres)
         music = Music.objects.get(id=self.kwargs['pk'])
         context['m'] = music
@@ -216,9 +221,11 @@ class CreateMusicView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):
         businessUser = BusinessUser.objects.get(user=self.request.user)
+        # set locationId from the business user's location
         locationId = businessUser.getLocationId().id
         form.instance.timestamp = datetime.datetime.now()
         form.instance.locationId = locationId
+        # generate a unique id for the music object
         form.instance.id = str(uuid.uuid4())
         # save the music object to database
         form.save()
@@ -246,6 +253,7 @@ class GraphView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         businessUser = BusinessUser.objects.get(user=self.request.user)
         
+        # get all orders for the business user's location
         orders_qs = Order.objects.filter(locationId=businessUser.getLocationId())
         
         if 'consumer_name' in self.request.GET:
@@ -280,6 +288,7 @@ class GraphView(LoginRequiredMixin, TemplateView):
                 
         context['orders'] = orders_qs.order_by('-time')
         
+        # get all music for the business user's location
         music_qs = Music.objects.filter(locationId=businessUser.getLocationId().id)
         
         if 'artist' in self.request.GET:

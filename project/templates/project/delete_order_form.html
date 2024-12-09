@@ -42,6 +42,8 @@ Description: displays a form to delete an order in the database
             <th class="table_text">Drinks</th>
             <td class="table_text">
                 <ul>
+                    <!-- for each drinkOrderCount in the order, we display 
+                     the drink name, mixer name, and count -->
                     {% for d in o.drinkOrderCounts.all %}
                         <li>
                             {% if d.drinkOrder.drinkId %}

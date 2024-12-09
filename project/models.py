@@ -17,6 +17,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 load_dotenv()
+# Cannot upload the json file to Heroku, so we need to get 
+# the credentials from the environment
 #cred = credentials.Certificate("cheers-460f2-fd5e3013b68e.json")
 
 jsonCreds = os.environ.get("GOOGLE_CREDS", "{}")
@@ -141,9 +143,9 @@ class Order(models.Model):
     amountPaidCents = models.IntegerField()
     consumerId = models.TextField()
     consumerName = models.TextField()
-    drinkOrderCounts = models.ManyToManyField("DrinkOrderCount") #A django admin glitch shows tons 
-    #of duplicates/other objects, 
-    #checked with ORM and all good though, this drove me absolutely crazy
+    drinkOrderCounts = models.ManyToManyField("DrinkOrderCount") #A django admin glitch 
+    # shows tons of duplicates/other objects, 
+    # checked with ORM and all good though, this drove me absolutely crazy
     fastTrack = models.BooleanField()
     fcmToken = models.TextField(null=True, blank=True)
     locationId = models.ForeignKey("Location", on_delete=models.CASCADE)
@@ -168,7 +170,8 @@ class Music(models.Model):
     title = models.TextField()
     albumArtURL = models.TextField()
     artistName = models.TextField()
-    genres = models.TextField() #saved as json string using json.dumps(array), can be converted back to array using json.loads(string) 
+    genres = models.TextField() # saved as json string using 
+    # json.dumps(array), can be converted back to array using json.loads(string) 
     locationId = models.TextField()
     timestamp = models.DateTimeField()
     
@@ -183,14 +186,16 @@ class Music(models.Model):
     
 def locationData():
     '''Get location data for a specific location from Firestore collection locations_v2.'''
-    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    # May need to change to get location id from logged in user, for now there is only one
+    # location in the Firestore collection
     result = db.collection('locations_v2').document("LlnX4nPSdFPlnyckEJiR").get().to_dict()
     #print(result)
     return result
 
 def musicData():
     '''Get music data for a specific location from Firestore collection music.'''
-     # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    # May need to change to get location id from logged in user, for now there is only one
+    # location in the Firestore collection
     result = db.collection('music').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
     #convert to dict
     result = {doc.id: doc.to_dict() for doc in result}
@@ -199,7 +204,8 @@ def musicData():
 
 def ordersData():
     '''Get orders data for a specific location from Firestore collection orders_v2.'''
-    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    # May need to change to get location id from logged in user, for now there is only one
+    # location in the Firestore collection
     result = db.collection('orders_v2').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
     #convert to dict
     result = {doc.id: doc.to_dict() for doc in result}
@@ -208,7 +214,8 @@ def ordersData():
 
 def salePointsData():
     '''Get sale points data for a specific location from Firestore collection salePoints.'''
-    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    # May need to change to get location id from logged in user, for now there is only one
+    # location in the Firestore collection
     result = db.collection('salePoints').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
     #convert to dict
     result = {doc.id: doc.to_dict() for doc in result}
@@ -217,7 +224,8 @@ def salePointsData():
 
 def businessUsersData():
     '''Get business users data for a specific location from Firestore collection businessUsers.'''
-    # CHANGE TO GET LOCATION ID FROM LOGGED IN USER
+    # May need to change to get location id from logged in user, for now there is only one
+    # location in the Firestore collection
     result = db.collection('businessUsers').where(filter=FieldFilter("locationId", "==", "LlnX4nPSdFPlnyckEJiR")).get()
     #convert to dict
     result = {doc.id: doc.to_dict() for doc in result}
@@ -243,7 +251,7 @@ def load_data():
     # possibly make exception for duplicates, name or id, possible problem with orders
     
     location_data = locationData()
-    
+    # Retrieve all drinks from the location data
     for k, d in location_data.get('drinks', {}).items():
         drink_id = k
         name = d.get('name')
@@ -279,6 +287,7 @@ def load_data():
             drink.currency = currency
             drink.save()
             
+    # Retrieve all mixers from the location data        
     for k, m in location_data.get('mixers', {}).items():
         mixer_id = k
         name = m.get('name')
@@ -307,7 +316,8 @@ def load_data():
             mixer.save()
             
     
-    # CHANGE TO GET LOCATION ID FROM LOGGED IN BUSINESS USER
+    # May need to change to get location id from logged in user, for now there is only one
+    # location in the Firestore collection
     location_id = 'LlnX4nPSdFPlnyckEJiR'
         
     #create location if id doesn't exist, and set defaults
@@ -340,6 +350,7 @@ def load_data():
     
     music_data = musicData()
     
+    # Retrieve all music from the music data
     for k, m in music_data.items():
         music_id = k
         title = m.get('title')
@@ -382,6 +393,7 @@ def load_data():
             
     sale_points_data = salePointsData()
     
+    # Retrieve all sale points from the sale points data
     for k, s in sale_points_data.items():
         sale_point_id = k
         name = s.get('name')
@@ -409,6 +421,7 @@ def load_data():
     DrinkOrderCount.objects.all().delete()
     DrinkOrder.objects.all().delete()
     
+    # Retrieve all orders from the orders data
     for k, o in orders_data.items():
         order_id = k
         amountPaidCents = o.get('amountPaidCents')
@@ -433,7 +446,10 @@ def load_data():
         #many to many field for drinkOrderCounts
         drinkOrderCounts = o.get('drinkOrderCounts')
         #print(f'drinkOrderCounts: {drinkOrderCounts}')
+        
         drinkOrderCountsList = []
+        # loop through drinkOrderCounts to create DrinkOrder and DrinkOrderCount objects
+        # for this order
         for d in drinkOrderCounts:
             #print(f'd: {d}')
             count = d.get('count')
@@ -459,6 +475,7 @@ def load_data():
             else:
                 mixer = None
                 
+            # create DrinkOrder object
             drinkOrderFinal = DrinkOrder(
                 bottle = drinkOrderBottle,
                 drinkId = drink,
@@ -467,7 +484,7 @@ def load_data():
             )
             drinkOrderFinal.save()
             
-            
+            # create DrinkOrderCount object
             drinkOrderCountFinal = DrinkOrderCount(
                 count = count,
                 drinkOrder = DrinkOrder.objects.get(pk=drinkOrderFinal.pk)
@@ -476,6 +493,7 @@ def load_data():
             
             drinkOrderCountsList.append(drinkOrderCountFinal)
             
+        # finally create the Order object without the drinkOrderCounts
         order = Order(
             id = order_id,
             amountPaidCents = amountPaidCents,
@@ -499,7 +517,10 @@ def load_data():
             
         
         #print(f'drinkOrderCountsList: {drinkOrderCountsList}')
+        
+        # Clear the many to many field, just in case
         order.drinkOrderCounts.clear()
+        # Iterate through the list of drinkOrderCounts and add them to the order
         for d in drinkOrderCountsList:
             #print(f'drinkOrderCount: {d}')
             #print(f'd.pk: {d.pk}')
@@ -509,6 +530,7 @@ def load_data():
         
         business_data = businessUsersData()
         
+        # Retrieve all business users from the business data
         for k, b in business_data.items():
             business_id = k
             locationId = b.get('locationId')
@@ -532,6 +554,7 @@ def load_data():
         
         users_data = cheersUsersData()
         
+        # Retrieve all cheers users from the users data
         for k, u in users_data.items():
             user_id = k
             
@@ -563,6 +586,7 @@ def load_data():
                 
 def deleteAll():
     '''Delete all data from all models.'''
+    # Useful for debugging and testing
     BusinessUser.objects.all().delete()
     CheersUser.objects.all().delete()
     SalePoint.objects.all().delete()

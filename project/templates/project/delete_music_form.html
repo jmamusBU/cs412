@@ -27,6 +27,9 @@ Description: displays a form to delete a song in the database
             <th class="table_text">Genres</th>
             <td class="table_text">
                 <ul>
+                    <!--genres has been changed back into an area within 
+                    get_context, so it can be interpreted nicely
+                    -->
                     {% for g in genres %}
                         <li>{{ g }}</li>
                     {% endfor %}

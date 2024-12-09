@@ -1,6 +1,6 @@
-# File: mini_fb/urls.py
+# File: project/urls.py
 # Author: Jose Maria Amusategui Garcia Peri (jmamus@bu.edu) 04/10/2024
-# Description: URL patterns for the mini_fb app
+# Description: URL patterns for the project app
 
 from django.urls import path
 from django.conf import settings
