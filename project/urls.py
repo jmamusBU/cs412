@@ -14,7 +14,7 @@ from . import views
 
 # all of the URLs that are part of this app
 urlpatterns = [
-    path(r'', views.testView, name='test_view'),
+    path(r'', OrderListView.as_view(), name='home'),
     path(r'orders/', OrderListView.as_view(), name='orders'),
     path(r'music/', MusicListView.as_view(), name='music'),
     path(r'login/', auth_views.LoginView.as_view(template_name='project/login.html'), name='login'),
