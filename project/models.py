@@ -586,6 +586,7 @@ def load_data():
                 
 def deleteAll():
     '''Delete all data from all models.'''
+    
     # Useful for debugging and testing
     BusinessUser.objects.all().delete()
     CheersUser.objects.all().delete()
